@@ -1,0 +1,24 @@
+<%
+local dsp = require "luci.dispatcher"
+-%>
+
+<script type="text/javascript">//<![CDATA[
+	(new XHR()).get('<%=dsp.build_url("admin/services/bypass2ray/version")%>', null,
+		function(x, data)
+		{
+			if (x.status !== 200 || !data)
+			{
+				return;
+			}
+
+			var s, d;
+
+			if ((s = document.getElementById('cbi-bypass2ray-global-binary_file')) && (d = s.getElementsByClassName('cbi-value-description')))
+			{
+				d[0].innerHTML = data.valid
+					? String.format('<%:Version: %s%>', data.version)
+					: String.format('<span style="color: red;">%s</span>', data.message);
+			}
+		}
+	);
+//]]></script>

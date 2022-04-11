@@ -1,0 +1,12 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@bypass2ray[-1]
+	add ucitrack bypass2ray
+	set ucitrack.@bypass2ray[-1].init=bypass2ray
+	commit ucitrack
+EOF
+
+[ ! -s "/etc/config/bypass2ray" ] && cp -f /usr/share/bypass2ray/default_config /etc/config/bypass2ray
+rm -f /tmp/luci-indexcache
+rm -rf /tmp/luci-modulecache/
