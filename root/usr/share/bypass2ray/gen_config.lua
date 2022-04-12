@@ -1,5 +1,5 @@
 #!/usr/bin/lua
-local uci = require 'luci.model.uci'
+local uci = require "luci.model.uci".cursor()
 local jsonc = require 'luci.jsonc'
 
 local gen_config_name = arg[1]
@@ -73,9 +73,9 @@ function split(str, d)
 	local start = 1
 	while start <= n do
 		local i = string.find(str, d, start) -- find 'next' 0
-		if i == nil then 
+		if i == nil then
 			table.insert(lst, string.sub(str, start, n))
-			break 
+			break
 		end
 		table.insert(lst, string.sub(str, start, i-1))
 		if i == n then
@@ -150,7 +150,7 @@ for _, v in ipairs(InboundCfg) do
             if v["settings_dokodemodoor_followredirect"] then
                 settings["followRedirect"] = true
             end
-            TempTable["settings"] = settings
+            if next(settings) ~= nil then TempTable["settings"] = settings end
         elseif v["protocol"] == "http" then
             local settings = {}
             if v["settings_http_account_user"] then
@@ -171,7 +171,9 @@ for _, v in ipairs(InboundCfg) do
             if v["settings_http_allowtransparent"] then
                 settings["allowTransparent"] = true
             end
-            TempTable["settings"] = settings
+            if next(settings) ~= nil then
+                TempTable["settings"] = settings
+            end
         elseif v["protocol"] == "shadowsocks" then
             local settings = {}
             if v["settings_shadowsocks_method"] then
@@ -189,7 +191,9 @@ for _, v in ipairs(InboundCfg) do
             if v["settings_shadowsocks_network"] then
                 settings["network"] = table.concat(split(v["settings_shadowsocks_network"], " "), ",")
             end
-            TempTable["settings"] = settings
+            if next(settings) ~= nil then
+                TempTable["settings"] = settings
+            end
         elseif v["protocol"] == "socks" then
             local settings = {}
             if v["settings_socks_auth"] then
@@ -213,7 +217,9 @@ for _, v in ipairs(InboundCfg) do
             if v["settings_socks_ip"] then
                 settings["ip"] = v["settings_socks_ip"]
             end
-            TempTable["settings"] = settings
+            if next(settings) ~= nil then
+                TempTable["settings"] = settings
+            end
         elseif v["protocol"] == "vmess" then
             local settings = {}
             if v["settings_vmess_client_id"] then
@@ -243,7 +249,9 @@ for _, v in ipairs(InboundCfg) do
             if v["settings_vmess_disableinsecureencryption"] then
                 settings["disableInsecureEncryption"] = true
             end
-            TempTable["settings"] = settings
+            if next(settings) ~= nil then
+                TempTable["settings"] = settings
+            end
         elseif v["protocol"] == "trojan" then
             local settings = {}
             if v["settings_trojan_password"] then
@@ -259,7 +267,9 @@ for _, v in ipairs(InboundCfg) do
                 settings["clients"]["flow"] = v["settings_trojan_flow"]
                 xtls = true
             end
-            TempTable["settings"] = settings
+            if next(settings) ~= nil then
+                TempTable["settings"] = settings
+            end
         elseif v["protocol"] == "vless" then
             local settings = {}
             if v["settings_vless_id"] then
@@ -275,17 +285,19 @@ for _, v in ipairs(InboundCfg) do
                 settings["clients"]["flow"] = v["settings_vless_flow"]
                 xtls = true
             end
-            TempTable["settings"] = settings
+            if next(settings) ~= nil then
+                TempTable["settings"] = settings
+            end
         end
-        TempTable["streamSettings"] = {}
+        local streamSettings = {}
         if v["ss_network"] then
-            TempTable["streamSettings"]["network"] = v["ss_network"]
+            streamSettings["network"] = v["ss_network"]
         end
         if v["ss_security"] then
             if xtls then
-                TempTable["streamSettings"]["security"] = "x" .. v["ss_security"]
+                streamSettings["security"] = "x" .. v["ss_security"]
             else
-                TempTable["streamSettings"]["security"] = v["ss_security"]
+                streamSettings["security"] = v["ss_security"]
             end
             local tls = {}
             if v["ss_tls_servername"] then
@@ -339,9 +351,9 @@ for _, v in ipairs(InboundCfg) do
                 table.insert(tls["certificates"], certificates)
             end
             if xtls then
-                TempTable["streamSettings"]["xtlsSettings"] = tls
+                streamSettings["xtlsSettings"] = tls
             else
-                TempTable["streamSettings"]["tlsSettings"] = tls
+                streamSettings["tlsSettings"] = tls
             end
         end
         if v["ss_network"] == "tcp" then
@@ -386,7 +398,7 @@ for _, v in ipairs(InboundCfg) do
                 end
             end
             if next(settings) ~= nil then
-                TempTable["streamSettings"]["tcpSettings"] = settings
+                streamSettings["tcpSettings"] = settings
             end
         elseif v["ss_network"] == "kcp" then
             local settings = {}
@@ -419,7 +431,7 @@ for _, v in ipairs(InboundCfg) do
                 settings["seed"] = v["ss_kcp_seed"]
             end
             if next(settings) ~= nil then
-                TempTable["streamSettings"]["kcpSettings"] = settings
+                streamSettings["kcpSettings"] = settings
             end
         elseif v["ss_network"] == "ws" then
             local settings = {}
@@ -433,7 +445,7 @@ for _, v in ipairs(InboundCfg) do
                 settings["headers"] = ListToMap(v["ss_ws_headers"])
             end
             if next(settings) ~= nil then
-                TempTable["streamSettings"]["wsSettings"] = settings
+                streamSettings["wsSettings"] = settings
             end
         elseif v["ss_network"] == "http" then
             local settings = {}
@@ -450,7 +462,7 @@ for _, v in ipairs(InboundCfg) do
                 settings["health_check_timeout"] = tonumber(v["ss_http_healthchecktimeout"])
             end
             if next(settings) ~= nil then
-                TempTable["streamSettings"]["httpSettings"] = settings
+                streamSettings["httpSettings"] = settings
             end
         elseif v["ss_network"] == "domainsocket" then
             local settings = {}
@@ -458,7 +470,7 @@ for _, v in ipairs(InboundCfg) do
                 settings["path"] = v["ss_domainsocket_path"]
             end
             if next(settings) ~= nil then
-                TempTable["streamSettings"]["dsSettings"] = settings
+                streamSettings["dsSettings"] = settings
             end
         elseif v["ss_network"] == "quic" then
             local settings = {}
@@ -475,7 +487,7 @@ for _, v in ipairs(InboundCfg) do
                 settings["header"]["type"] = v["ss_quic_header_type"]
             end
             if next(settings) ~= nil then
-                TempTable["streamSettings"]["quicSettings"] = settings
+                streamSettings["quicSettings"] = settings
             end
         elseif v["ss_network"] == "grpc" then
             local settings = {}
@@ -495,12 +507,12 @@ for _, v in ipairs(InboundCfg) do
                 settings["permit_without_stream"] = true
             end
             if next(settings) ~= nil then
-                TempTable["streamSettings"]["grpcSettings"] = settings
+                streamSettings["grpcSettings"] = settings
             end
         end
         local sockopt = {}
         if v["ss_sockopt_tcpfastopen"] then
-            if v["ss_sockopt_tcp_fast_open"] == "true" then
+            if v["ss_sockopt_tcpfastopen"] == "true" then
                 sockopt["tcpFastOpen"] = true
             elseif v["ss_sockopt_tcpfastopen"] ~= "false" then
                 sockopt["tcpFastOpen"] = tonumber(v["ss_sockopt_tcpfastopen"])
@@ -519,7 +531,10 @@ for _, v in ipairs(InboundCfg) do
             sockopt["acceptProxyProtocol"] = true
         end
         if next(sockopt) ~= nil then
-            TempTable["streamSettings"]["sockopt"] = sockopt
+            streamSettings["sockopt"] = sockopt
+        end
+        if next(streamSettings) ~= nil then
+            TempTable["streamSettings"] = streamSettings
         end
         local sniffing = {}
         if v["sniffing_enabled"] then
@@ -717,7 +732,7 @@ for _, v in ipairs(OutboundCfg) do
                     users_atom["id"] = v["settings_vless_vnext_users_id"]
                 end
                 if v["settings_vless_vnext_users_encryption"] then
-                    users_atom["encryption"] = tonumber(v["settings_vless_vnext_users_encryption"])
+                    users_atom["encryption"] = v["settings_vless_vnext_users_encryption"]
                 end
                 if v["settings_vless_vnext_servers_flow"] then
                     users_atom["flow"] = v["settings_vless_vnext_servers_flow"]
@@ -953,6 +968,32 @@ for _, v in ipairs(OutboundCfg) do
             if next(settings) ~= nil then
                 streamSettings["grpcSettings"] = settings
             end
+        end
+        local sockopt = {}
+        if v["ss_sockopt_mark"] then
+            sockopt["mark"] = tonumber(v["ss_sockopt_mark"])
+        end
+        if v["ss_sockopt_tcpfastopen"] then
+            if v["ss_sockopt_tcpfastopen"] == "true" then
+                sockopt["tcpFastOpen"] = true
+            elseif v["ss_sockopt_tcpfastopen"] ~= "false" then
+                sockopt["tcpFastOpen"] = tonumber(v["ss_sockopt_tcpfastopen"])
+            end
+        end
+        if v["ss_sockopt_tproxy"] then
+            sockopt["tproxy"] = v["ss_sockopt_tproxy"]
+        end
+        if v["ss_sockopt_domainstrategy"] then
+            sockopt["domainStrategy"] = v["ss_sockopt_domainstrategy"]
+        end
+        if v["ss_sockopt_dialerproxy"] then
+            sockopt["dialerProxy"] = v["ss_sockopt_dialerproxy"]
+        end
+        if next(sockopt) ~= nil then
+            streamSettings["sockopt"] = sockopt
+        end
+        if next(streamSettings) ~= nil then
+            TempTable["streamSettings"] = streamSettings
         end
         if next(streamSettings) ~= nil then
             TempTable["streamSettings"] = streamSettings

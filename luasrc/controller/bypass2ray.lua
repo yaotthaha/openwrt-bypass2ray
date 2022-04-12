@@ -135,13 +135,15 @@ end
 function get_access_log()
 	local filename = support.get_access_log_filename()
 	if filename ~= nil then
-		luci.http.write(luci.sys.exec("[ -f '" .. filename .. "' ] && cat " .. filename .. " | while read line; do echo $line'<br/>'; done"))
+		local title = "Access Log File: " .. filename .. "<br/>======<br/>"
+		luci.http.write(title .. luci.sys.exec("[ -f '" .. filename .. "' ] && cat " .. filename .. " | while read line; do echo $line'<br/>'; done"))
 	end
 end
 
 function get_error_log()
 	local filename = support.get_error_log_filename()
 	if filename ~= nil then
-		luci.http.write(luci.sys.exec("[ -f '" .. filename .. "' ] && cat " .. filename .. " | while read line; do echo $line'<br/>'; done"))
+		local title = "Error Log File: " .. filename .. "<br/>======<br/>"
+		luci.http.write(title .. luci.sys.exec("[ -f '" .. filename .. "' ] && cat " .. filename .. " | while read line; do echo $line'<br/>'; done"))
 	end
 end

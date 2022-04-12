@@ -1,6 +1,7 @@
 local support = require "luci.model.cbi.bypass2ray.support"
 local uci = require "luci.model.uci".cursor()
 local dsp = require "luci.dispatcher"
+local jsonc = require 'luci.jsonc'
 local appname = support.appname
 local m, s, o
 
@@ -54,6 +55,37 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or false
 end
 
+o = s:option(DummyValue, "inboundtag", translate("Inbound Tag"))
+o.cfgvalue = function (_, n)
+	local Value = uci:get(appname, n, "inboundtag")
+	if type(Value) == "table" then
+		if table.getn(Value) <= 0 then
+			return "-"
+		end
+		local str = ""
+		for K, V in ipairs(Value) do
+			if K == table.getn(Value) then
+				str = str .. V
+			else
+				str = str .. V .. ", "
+			end
+		end
+		return str
+	else
+		return "-"
+	end
+end
+
+o = s:option(DummyValue, "outboundtag", translate("Outbound Tag"))
+o.cfgvalue = function (...)
+	return Value.cfgvalue(...) or "-"
+end
+
+o = s:option(DummyValue, "balancertag", translate("Balancer Tag"))
+o.cfgvalue = function (...)
+	return Value.cfgvalue(...) or "-"
+end
+
 -- Balancer
 
 s = m:section(TypedSection, "routing_balancer", translate("Balancer"))
@@ -82,6 +114,27 @@ end
 o = s:option(DummyValue, "tag", translate("Tag"))
 o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "?"
+end
+
+o = s:option(DummyValue, "selector", translate("Selector"))
+o.cfgvalue = function (_, n)
+	local Value = uci:get(appname, n, "selector")
+	if type(Value) == "table" then
+		if table.getn(Value) <= 0 then
+			return "-"
+		end
+		local str = ""
+		for K, V in ipairs(Value) do
+			if K == table.getn(Value) then
+				str = str .. V
+			else
+				str = str .. V .. ", "
+			end
+		end
+		return str
+	else
+		return "-"
+	end
 end
 
 return m

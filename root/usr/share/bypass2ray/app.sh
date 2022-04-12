@@ -65,6 +65,7 @@ start() {
         exit 1
     fi
     if [ ! -f "$CONFIG" ]; then
+        echo "Config Not Found"
         exit 1
     else
         if [ -f "$PID" ]; then
@@ -80,7 +81,7 @@ start() {
         export V2RAY_LOCATION_ASSET=$(config_n_get global resource_location "/usr/share/bypass2ray/")
         export XRAY_LOCATION_ASSET=$V2RAY_LOCATION_ASSET
         log "启动程序"
-        $RUNFILE run -config $CONFIG >/dev/null 2>&1 &
+        $RUNFILE run -config $CONFIG >$TMPDIR/all.log 2>&1 &
         id=`echo $!`
         log "PID: $id"
         echo $id > $PID

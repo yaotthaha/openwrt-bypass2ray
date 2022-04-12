@@ -221,7 +221,6 @@ o.rmempty = false
 
 o = s:option(ListValue, "settings_vless_vnext_users_encryption", "%s - %s" % { "VLESS", translate("Encryption") })
 o:depends("protocol", "vless")
-o:value("")
 o:value("none")
 
 vless_flow = s:option(ListValue, "settings_vless_vnext_servers_flow", "%s - %s" % { "VLESS", translate("Flow") },
@@ -487,7 +486,5 @@ o:value("UseIPv4")
 o:value("UseIPv6")
 
 o = s:option(Value, "ss_sockopt_dialerproxy", "%s - %s" % { translate("Sockopt"), translate("DialerProxy") })
-
-o = s:option(Flag, "ss_sockopt_acceptproxyprotocol", "%s - %s" % { translate("Sockopt"), translate("AcceptProxyProtocol") })
 
 return m
