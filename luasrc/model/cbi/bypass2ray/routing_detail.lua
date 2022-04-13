@@ -1,4 +1,5 @@
 local dsp = require "luci.dispatcher"
+local uci = require "luci.model.uci".cursor()
 local appname = require "luci.model.cbi.bypass2ray.support".appname
 local m, s, o
 
@@ -41,6 +42,14 @@ if m.uci:get(appname, uuid) == "routing_rule" then
 	o.datatype = "or(ip4addr, ip6addr, ip4prefix, ip6prefix, string)"
 
 	o = s:option(DynamicList, "inboundtag", translate("InboundTag"))
+	uci:foreach(appname, "inbound", function(t)
+		if t["tag"] ~= nil then
+			if t["enable"] ~= "1" then
+				return
+			end
+			o:value(t["tag"], translate(t["alias"]))
+		end
+	end)
 
 	o = s:option(MultiValue, "protocol", translate("Protocol"))
 	o:value("http")
@@ -49,9 +58,27 @@ if m.uci:get(appname, uuid) == "routing_rule" then
 
 	o = s:option(Value, "attrs", translate("Attrs"))
 
-	o = s:option(Value, "outboundtag", translate("OutboundTag"))
+	o = s:option(ListValue, "outboundtag", translate("OutboundTag"))
+	o:value("")
+	uci:foreach(appname, "outbound", function(t)
+		if t["tag"] ~= nil then
+			if t["enable"] ~= "1" then
+				return
+			end
+			o:value(t["tag"], translate(t["alias"]))
+		end
+	end)
 
-	o = s:option(Value, "balancertag", translate("BalancerTag"))
+	o = s:option(ListValue, "balancertag", translate("BalancerTag"))
+	o:value("")
+	uci:foreach(appname, "routing_balancer", function(t)
+		if t["tag"] ~= nil then
+			if t["enable"] ~= "1" then
+				return
+			end
+			o:value(t["tag"])
+		end
+	end)
 
 	return m
 elseif m.uci:get(appname, uuid) == "routing_balancer" then

@@ -45,7 +45,10 @@ function index()
 	entry({"admin", "services", appname, "clear_log"}, call("clear_log"))
 	entry({"admin", "services", appname, "get_access_log"}, call("get_access_log"))
 	entry({"admin", "services", appname, "get_error_log"}, call("get_error_log"))
-    
+	--[[ Mod SubScribe ]]
+    entry({"admin", "services", appname, "subscribe"}, arcombine(cbi(appname .. "/subscribe"), cbi(appname .. "/subscribe_detail")),
+	_("SubScribe"), 100).leaf = true
+	entry({"admin", "services", appname, "get_subscribe_peer"}, call("send_subscribe_peer"))
 end
 
 function action_status()
@@ -146,4 +149,8 @@ function get_error_log()
 		local title = "Error Log File: " .. filename .. "<br/>======<br/>"
 		luci.http.write(title .. luci.sys.exec("[ -f '" .. filename .. "' ] && cat " .. filename .. " | while read line; do echo $line'<br/>'; done"))
 	end
+end
+
+function send_subscribe_peer()
+	luci.http.write_json(support.GetSubScribePeerInfo(luci.http.formvalue("sid")))
 end

@@ -399,7 +399,7 @@ o:depends("ss_tcp_header_type", "http")
 --o.default = "/"
 
 o = s:option(DynamicList, "ss_tcp_header_request_headers", "%s - %s" % { "TCP", translate("Request headers") },
-	translatef("A list of HTTP headers, format: <code>header=value</code>. eg: %s", "Host=www.bing.com"))
+	translatef("A list of HTTP headers, format: <code>header=value</code>. eg: %s", "Host: www.bing.com"))
 o:depends("ss_tcp_header_type", "http")
 
 o = s:option(Value, "ss_tcp_header_response_version", "%s - %s" % { "TCP", translate("HTTP response version") })
@@ -415,7 +415,7 @@ o:depends("ss_tcp_header_type", "http")
 --o.placeholder = "OK"
 
 o = s:option(DynamicList, "ss_tcp_header_response_headers", "%s - %s" % { "TCP", translate("Response headers") },
-	translatef("A list of HTTP headers, format: <code>header=value</code>. eg: %s", "Host=www.bing.com"))
+	translatef("A list of HTTP headers, format: <code>header=value</code>. eg: %s", "Host: www.bing.com"))
 o:depends("ss_tcp_header_type", "http")
 
 -- Stream Settings - KCP
@@ -473,7 +473,7 @@ o = s:option(Value, "ss_ws_path", "%s - %s" % { "WebSocket", translate("Path") }
 o:depends("ss_network", "ws")
 
 o = s:option(DynamicList, "ss_ws_headers", "%s - %s" % { "WebSocket", translate("Headers") },
-	translatef("A list of HTTP headers, format: <code>header=value</code>. eg: %s", "Host=www.bing.com"))
+	translatef("A list of HTTP headers, format: <code>header=value</code>. eg: %s", "Host: www.bing.com"))
 o:depends("ss_network", "ws")
 
 -- Stream Settings - HTTP/2

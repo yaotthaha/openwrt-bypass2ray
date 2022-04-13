@@ -77,8 +77,45 @@ o.cfgvalue = function (_, n)
 end
 
 o = s:option(DummyValue, "outboundtag", translate("Outbound Tag"))
-o.cfgvalue = function (...)
-	return Value.cfgvalue(...) or "-"
+o.cfgvalue = function (_, n)
+	local Value = uci:get(appname, n, "outboundtag")
+	if Value == nil or Value == "" then
+		return "-"
+	end
+	local V
+	uci:foreach(appname, "outbound", function(s)
+		if s["tag"] == nil or s["tag"] ~= Value then
+			return
+		end
+		if s["alias"] ~= nil and s["alias"] ~= "" then
+			V = s["alias"]
+		else
+			V = "?"
+		end
+	end)
+	if V == nil or V == "" then
+		return "-"
+	else
+		return V
+	end
+	--[[
+	if type(Value) == "table" then
+		if table.getn(Value) <= 0 then
+			return "-"
+		end
+		local str = ""
+		for K, V in ipairs(Value) do
+			if K == table.getn(Value) then
+				str = str .. V
+			else
+				str = str .. V .. ", "
+			end
+		end
+		return str
+	else
+		return "-"
+	end
+	--]]
 end
 
 o = s:option(DummyValue, "balancertag", translate("Balancer Tag"))

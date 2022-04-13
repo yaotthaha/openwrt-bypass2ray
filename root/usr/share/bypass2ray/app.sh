@@ -73,10 +73,7 @@ start() {
             log "程序已启动"
             exit 1
         fi
-        BEFORE_START_SCRIPTS=$(config_t_get other_settings_scripts before_start_script)
-        [ "$BEFORE_START_SCRIPTS" != "" ] &&  {
-            echo $BEFORE_START_SCRIPTS | sed 's/\s/\n/g' | while read shell; do echo Run Before Start Script $shell; log "执行启动前脚本: $shell"; $shell; done
-        }
+        lua /usr/share/bypass2ray/run_scripts.lua bstart | while read l; do [ -z "$l" ] || echo $l && log $l; done
         ulimit -n 65535
         export V2RAY_LOCATION_ASSET=$(config_n_get global resource_location "/usr/share/bypass2ray/")
         export XRAY_LOCATION_ASSET=$V2RAY_LOCATION_ASSET
@@ -85,10 +82,7 @@ start() {
         id=`echo $!`
         log "PID: $id"
         echo $id > $PID
-        AFTER_START_SCRIPTS=$(config_t_get other_settings_scripts after_start_script)
-        [ "$AFTER_START_SCRIPTS" != "" ] &&  {
-            echo $AFTER_START_SCRIPTS | sed 's/\s/\n/g' | while read shell; do echo Run After Start Script $shell; log "执行启动后脚本: $shell"; $shell; done
-        }
+        lua /usr/share/bypass2ray/run_scripts.lua astart | while read l; do [ -z "$l" ] || echo $l && log $l; done
     fi
 }
 
@@ -104,19 +98,13 @@ stop() {
             log "临时文件夹路径未找到"
             exit 1
         fi
-	    BEFORE_STOP_SCRIPTS=$(config_t_get other_settings_scripts before_stop_script)
-	    [ "$BEFORE_STOP_SCRIPTS" != "" ] &&  {
-	        echo $BEFORE_STOP_SCRIPTS | sed 's/\s/\n/g' | while read shell; do echo Run Before Stop Script $shell; log "执行结束前脚本: $shell"; $shell; done
-	    }
+	    lua /usr/share/bypass2ray/run_scripts.lua bstop | while read l; do [ -z "$l" ] || echo $l && log $l; done
         kill $(cat $PID) > /dev/null 2>&1
         rm -f $PID
         log "结束进程: $(cat $PID)"
         rm -rf $TMPDIR/*
         log "清空临时文件夹: $TMPDIR"
-        AFTER_STOP_SCRIPTS=$(config_t_get other_settings_scripts after_stop_script)
-	    [ "$AFTER_STOP_SCRIPTS" != "" ] &&  {
-	        echo $AFTER_STOP_SCRIPTS | sed 's/\s/\n/g' | while read shell; do echo Run After Stop Script $shell; log "执行结束后脚本: $shell"; $shell; done
-	    }
+        lua /usr/share/bypass2ray/run_scripts.lua astop | while read l; do [ -z "$l" ] || echo $l && log $l; done
     fi
 }
 
