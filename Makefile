@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-bypass2ray
 PKG_VERSION:=1.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_$(PKG_NAME)_Transparent_Proxy
@@ -14,7 +14,7 @@ LUCI_PKGARCH:=all
 LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
 	+ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc +resolveip \
 	+dnsmasq-full +ipset +iptables +iptables-legacy +iptables-mod-iprange \
-	+iptables-mod-socket +iptables-mod-tproxy +kmod-ipt-nat +sudo
+	+iptables-mod-socket +iptables-mod-tproxy +kmod-ipt-nat +sudo +tcping
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/bypass2ray

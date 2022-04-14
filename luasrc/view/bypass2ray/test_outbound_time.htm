@@ -1,0 +1,46 @@
+<%
+local dsp = require "luci.dispatcher"
+-%>
+
+<script type="text/javascript">
+    var peerinfo = document.querySelectorAll('.tr');
+    var group = new Array();
+    peerinfo.forEach(function(item, index) {
+        if (index == 0) {
+            return
+        }
+        var id = item.getAttribute('id').split('-')[2]; // Get ID
+        var n = 0
+        item.querySelectorAll('.td').forEach(function(m, i) {
+            if (m.getAttribute('data-name') == "_delay") {
+                n = i;
+            }
+        })
+        var delayTag = item.querySelectorAll('.td')[n]; // Delay
+        var delayHTML = delayTag.querySelector("div[data-index]").innerHTML;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var data = xhr.response;
+                if (data == null || data == "") {
+                    return
+                }
+                var h = "-"
+                var hS1 = '<font size="2" color="'
+                var hS2 = '">'
+                var hE = '</font>'
+                if (isNaN(parseInt(data))) {
+                    h = hS1 + "#B45945" + hS2 + data + hE // Red
+                } else if (parseInt(data) > 100) {
+                    h = hS1 + "#37E145" + hS2 + data + hE // Yellow
+                } else {
+                    h = hS1 + "#22C12F" + hS2 + data + hE
+                }
+                console.log(h);
+                delayTag.querySelector("div[data-index]").innerHTML = h + delayHTML;
+            }
+        }
+        xhr.open('GET', '<%=dsp.build_url("admin/services/bypass2ray/get_outbound_delay")%>' + "?sid=" + id, true);
+        xhr.send('');
+    });
+</script>

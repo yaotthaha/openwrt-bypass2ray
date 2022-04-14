@@ -40,24 +40,23 @@ local peers = support.split(string.gsub(resultDec, "\r\n", "\n"), "\n")
 if type(peers) ~= "table" then
     support.LogToFile("获取节点失败")
     return -1
-elseif table.getn(peers) <= 0 then
-    support.LogToFile("获取节点失败")
-    return -1
+else
+	local peer_copy = peers
+	for k, v in pairs(peer_copy) do
+		if v == "" then
+			table.remove(peers, k)
+		end
+	end
+	if table.getn(peers) <= 0 then
+    	support.LogToFile("获取节点失败")
+    	return -1
+	end
 end
 
-local all = 0
+local add = 0
+local del = 0
 local err = 0
 local filter = 0
-
-function FindExistPeer(subscribe_peerid)
-    local exist
-    uci:foreach(appname, "outbound", function(s)
-        if s["subscribe_peerid"] ~= nil and s["subscribe_peerid"] == subscribe_peerid then
-            exist = s[".name"]
-        end
-    end)
-    return exist
-end
 
 function Filter(keyword)
     if mode == "1" then
@@ -98,14 +97,16 @@ function Filter(keyword)
     end
 end
 
-function Do(link, commit)
+function Add(link, commit)
 	local linkN = string.gsub(link, "://", ":")
 	local linkLst = support.split(linkN, ":")
 	if linkLst[1] == "vmess" then
-		local msg = support.base64Decode(linkLst[2])
+		local linkLst_copy = linkLst
+		table.remove(linkLst_copy, 1)
+		local M = table.concat(linkLst_copy, ":")
+		local msg = support.base64Decode(M)
 		---- From https://github.com/2dust/v2rayN/wiki/%E5%88%86%E4%BA%AB%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E(ver-2)
 		local cfgjson = jsonc.parse(msg)
-        print(jsonc.stringify(cfgjson, 1))
 		if cfgjson["v"] == nil or cfgjson["v"] ~= "2" then
 			return -1  -- 版本信息错误
 		end
@@ -224,17 +225,12 @@ function Do(link, commit)
 		if cfgjson["sni"] ~= nil and cfgjson["sni"] ~= "" then
 			cfg_sni = cfgjson["sni"]
 		end
-        local exist = FindExistPeer(support.base64Encode(cfg_alias))
-        if exist ~= nil then
-            uci:delete(appname, exist)
-        end
         local uuid = support.gen_uuid()
 		uci:set(appname, uuid, "outbound")
 		uci:set(appname, uuid, "enable", "0")
 		uci:set(appname, uuid, "alias", cfg_alias)
         --
 		uci:set(appname, uuid, "subscribe_tag", subsid)
-        uci:set(appname, uuid, "subscribe_peerid", support.base64Encode(cfg_alias))
         uci:set(appname, uuid, "tag", string.sub(subsid, 1, 16) .. string.sub(uuid, 1, 16))
         --
 		uci:set(appname, uuid, "protocol", "vmess")
@@ -297,24 +293,151 @@ function Do(link, commit)
             uci:commit(appname)
         end
 	elseif linkLst[1] == "ss" then
-		return 1
+		local linkLst_copy = linkLst
+		table.remove(linkLst_copy, 1)
+		local info = table.concat(linkLst_copy, ":")
+		local security, password, alias, address, port
+		local t1 = support.split(info, '@')
+		if table.getn(t1) ~= 2 then
+			return -1
+		end
+		local b = support.split(support.base64Decode(t1[1]), ":")
+		security = b[1]
+		password = b[2]
+		local t2 = support.split(t1[2], '#')
+		if table.getn(t2) ~= 1 and table.getn(t2) ~= 2 then
+			return -1
+		end
+		if table.getn(t2) == 2 then
+			alias = t2[2]
+		end
+		local t3 = support.split(t2[1], ':')
+		port = t3[table.getn(t3)]
+		table.remove(t3, table.getn(t3))
+		address = table.concat(t3, ":")
+		--
+		if address == nil or address == "" or security == nil or security == "" or password == nil or password == "" or port == nil or port == "" then
+			return -1
+		end
+		if security ~= "aes-256-gcm" and security ~= "aes-128-gcm" and security ~= "chacha20-poly1305" and security ~= "chacha20-ietf-poly1305" then
+			return -1
+		end
+		if tonumber(port) == nil then
+			return -1
+		end
+		if alias == nil then
+			alias = support.gen_uuid(8)
+		else
+			alias = support.urlDecode(alias)
+			if not Filter(alias) then
+				return 1
+			end
+		end
+		local uuid = support.gen_uuid()
+		uci:set(appname, uuid, "outbound")
+		uci:set(appname, uuid, "enable", "0")
+		uci:set(appname, uuid, "alias", alias)
+        --
+		uci:set(appname, uuid, "subscribe_tag", subsid)
+        uci:set(appname, uuid, "tag", string.sub(subsid, 1, 16) .. string.sub(uuid, 1, 16))
+        --
+		uci:set(appname, uuid, "protocol", "shadowsocks")
+		uci:set(appname, uuid, "settings_shadowsocks_servers_address", address)
+		uci:set(appname, uuid, "settings_shadowsocks_servers_port", tonumber(port))
+		uci:set(appname, uuid, "settings_shadowsocks_servers_method", security)
+		uci:set(appname, uuid, "settings_shadowsocks_servers_password", password)
+		if commit then
+            uci:commit(appname)
+        end
 	else
 		return -1
 	end
 end
 
-for k, v in pairs(peers) do
-    print(v)
-    all = all + 1
-    local resp = Do(v, false)
+function Del(link, commit)
+	local linkN = string.gsub(link, "://", ":")
+	local linkLst = support.split(linkN, ":")
+	if linkLst[1] == "vmess" or linkLst[1] == "ss" then
+		local cfgjson = jsonc.parse(linkLst[2])
+		if cfgjson["v"] == nil or cfgjson["v"] ~= "2" then
+			return -1  -- 版本信息错误
+		end
+		local sid
+		uci:foreach(appname, "outbound", function(s)
+			if s["subscribe_tag"] ~= nil and s["subscribe_tag"] ~= "" and s["subscribe_tag"] == subsid and support.base64Encode(s["alias"]) == support.base64Encode(cfgjson["ps"]) then
+				sid = s[".name"]
+			end
+		end)
+		if sid ~= nil then
+			uci:delete(appname, sid)
+			if commit ~= nil then
+				uci:commit(appname)
+			end
+		else
+			return -1
+		end
+	end
+end
+
+local NeedAdd = {}
+local NeedDel = {}
+
+local old_list = uci:get(appname, subsid, "peerlist")
+if old_list == nil or type(old_list) == "table" and table.getn(old_list) <= 0 then
+	NeedAdd = peers
+	uci:set_list(appname, subsid, "peerlist", peers)
+else
+	local Temp = {}
+	for _, v in pairs(peers) do
+		if Temp[v] == nil then
+			Temp[v] = 0
+		end
+	end
+	for _, v in pairs(old_list) do
+		if Temp[v] == nil then
+			Temp[v] = -1
+		else
+			Temp[v] = Temp[v] + 1
+		end
+	end
+	for k, v in pairs(Temp) do
+		if v == 0 then
+			-- New => yes Old => no
+			table.insert(NeedAdd, k)
+		elseif v == -1 then
+			-- New => no Old => yes
+			table.insert(NeedDel, k)
+		elseif v > 0 then
+			-- New => yes Old => yes
+		end
+	end
+	uci:set_list(appname, subsid, "peerlist", peers)
+end
+
+
+for k, v in pairs(NeedAdd) do
+    local resp = Add(v, false)
     if resp == -1 then
         err = err + 1
-    elseif resp == 1 then
-        filter = filter + 1
+    else
+		add = add + 1
+		if resp == 1 then
+			filter = filter + 1
+		end
+    end
+end
+
+for k, v in pairs(NeedDel) do
+    local resp = Del(v, false)
+    if resp == -1 then
+        err = err + 1
+    else
+		del = del + 1
     end
 end
 
 uci:commit(appname)
-support.LogToFile("总节点：" .. tostring(all))
+support.LogToFile("添加节点：" .. tostring(add))
+support.LogToFile("删除节点：" .. tostring(del))
 support.LogToFile("无效节点：" .. tostring(err))
 support.LogToFile("过滤节点：" .. tostring(filter))

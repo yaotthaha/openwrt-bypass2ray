@@ -1,10 +1,80 @@
 <%
 local support = require "luci.model.cbi.bypass2ray.support"
 -%>
-<script type="text/javascript">
-	//<![CDATA[
-	function clearlog(btn) {
-		XHR.get('<%=support.url("clear_log")%>', null,
+
+<fieldset class="cbi-section" id="_log_fieldset">
+	<input id="all_log" class="btn cbi-button cbi-button-save" type="button" onclick="set_now(1)" value="<%:All Log%>" style="margin-right:10px;"/>
+	<%
+		local access_log_filename = support.get_access_log_filename()
+		if access_log_filename ~= nil or true then
+			print('<input id="access_log" class="btn cbi-button cbi-button-apply" type="button" onclick="set_now(2)" value="Access Log" style="margin-right:10px;"/>')
+		end
+	-%>
+	<%
+		local error_log_filename = support.get_error_log_filename()
+		if error_log_filename ~= nil or true then
+			print('<input id="error_log" class="btn cbi-button cbi-button-apply" type="button" onclick="set_now(3)" value="Error Log" style="margin-right:10px;"/>')
+		end
+	-%>
+	<input id="clear_log" class="btn cbi-button cbi-button-reset" type="button" onclick="clear_log_func()" value="<%:Clear Log%>" style="margin-left:100px;"/>
+	<textarea id="log_textarea" class="cbi-input-textarea" style="width: 100%;margin-top: 10px;" data-update="change" rows="40" wrap="off" readonly="readonly"></textarea>
+</fieldset>
+
+<script type="text/javascript">//<![CDATA[
+	var now = 1
+	var mode = 0
+	var all_log = "";
+	var access_log = "";
+	var error_log = "";
+	var tagArray = new Array();
+	tagArray[1] = "all_log";
+	tagArray[2] = "access_log";
+	tagArray[3] = "error_log";
+	if (document.getElementById('access_log') != null) {
+		mode++
+	}
+	if (document.getElementById('error_log') != null) {
+		mode++
+	}
+	XHR.poll(5, '<%=support.url("get_all_log")%>', null,
+		function(x, data) {
+			if(x && x.status == 200) {
+				all_log = x.responseText;
+			}
+		}
+	);
+	if (mode == 1) {
+		XHR.poll(5, '<%=support.url("get_access_log")%>', null,
+			function(x, data) {
+				if(x && x.status == 200) {
+					access_log = x.responseText;
+				}
+			}
+		);
+	}
+	if (mode == 2) {
+		XHR.poll(5, '<%=support.url("get_error_log")%>', null,
+			function(x, data) {
+				if(x && x.status == 200) {
+					error_log = x.responseText;
+				}
+			}
+		);
+	}
+	function flush_log() {
+		var log_textarea = document.getElementById('log_textarea');
+		if (now == 1) {
+			log_textarea.innerHTML = all_log;
+		}
+		if (now == 2) {
+			log_textarea.innerHTML = access_log;
+		}
+		if (now == 3) {
+			log_textarea.innerHTML = error_log;
+		}
+	}
+	function clear_all_log_func(btn) {
+		XHR.get('<%=support.url("clear_all_log")%>', null,
 			function(x, data) {
 				if(x && x.status == 200) {
 					var log_textarea = document.getElementById('log_textarea');
@@ -14,35 +84,48 @@ local support = require "luci.model.cbi.bypass2ray.support"
 			}
 		);
 	}
-	XHR.poll(5, '<%=support.url("get_log")%>', null,
-		function(x, data) {
-			if(x && x.status == 200) {
-				var log_textarea = document.getElementById('log_textarea');
-				log_textarea.innerHTML = x.responseText;
+	function clear_access_log_func(btn) {
+		XHR.get('<%=support.url("clear_access_log")%>', null,
+			function(x, data) {
+				if(x && x.status == 200) {
+					var log_textarea = document.getElementById('log_textarea');
+					log_textarea.innerHTML = "";
+					log_textarea.scrollTop = log_textarea.scrollHeight;
+				}
 			}
+		);
+	}
+	function clear_error_log_func(btn) {
+		XHR.get('<%=support.url("clear_error_log")%>', null,
+			function(x, data) {
+				if(x && x.status == 200) {
+					var log_textarea = document.getElementById('log_textarea');
+					log_textarea.innerHTML = "";
+					log_textarea.scrollTop = log_textarea.scrollHeight;
+				}
+			}
+		);
+	}
+	function clear_log_func(btn) {
+		if (now == 1) {
+			clear_all_log_func(btn);
 		}
-	);
-	function get_access_log() {
-		window.open('<%=support.url("get_access_log")%>')
+		if (now == 2) {
+			clear_access_log_func(btn);
+		}
+		if (now == 3) {
+			clear_error_log_func(btn);
+		}
 	}
-	function get_error_log() {
-		window.open('<%=support.url("get_error_log")%>')
+	function set_now(n) {
+		var now_old = now;
+		if (n == now_old) {
+			return
+		}
+		now = n;
+		document.querySelector('#' + tagArray[now_old]).setAttribute('class', 'btn cbi-button cbi-button-apply');
+		document.querySelector('#' + tagArray[n]).setAttribute('class', 'btn cbi-button cbi-button-save');
 	}
+	self.setInterval("flush_log()", 1000);
 	//]]>
 </script>
-<fieldset class="cbi-section" id="_log_fieldset">
-	<input class="btn cbi-button cbi-button-remove" type="button" onclick="clearlog()" value="<%:Clear logs%>" />
-	<%
-		local access_log_filename = support.get_access_log_filename()
-		if access_log_filename ~= nil then
-			print('<input class="btn cbi-button cbi-button-remove" type="button" onclick="get_access_log()" value="' .. "Show Access Log" .. '" />')
-		end
-	-%>
-	<%
-		local error_log_filename = support.get_error_log_filename()
-		if error_log_filename ~= nil then
-			print('<input class="btn cbi-button cbi-button-remove" type="button" onclick="get_error_log()" value="' .. "Show Error Log" .. '" />')
-		end
-	-%>
-	<textarea id="log_textarea" class="cbi-input-textarea" style="width: 100%;margin-top: 10px;" data-update="change" rows="40" wrap="off" readonly="readonly"></textarea>
-</fieldset>

@@ -1,6 +1,8 @@
 
 local support = require "luci.model.cbi.bypass2ray.support"
 local dsp = require "luci.dispatcher"
+local uci = require "luci.model.uci".cursor()
+local sys = require "luci.sys"
 local appname = "bypass2ray"
 local m, s, o
 
@@ -29,19 +31,26 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "?"
 end
 
+--[[
 o = s:option(DummyValue, "tag", translate("Tag"))
 o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "-"
 end
+--]]
 
 o = s:option(DummyValue, "ps_tag", translate("Proxy Tag"))
 o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "-"
 end
 
+
 o = s:option(Flag, "enable", translate("Enable"))
 o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or false
 end
+
+o = s:option(DummyValue, "_delay", translate("Delay"))
+
+m:append(Template(appname .. "/test_outbound_time"))
 
 return m

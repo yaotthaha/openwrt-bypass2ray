@@ -113,6 +113,7 @@ local dsp = require "luci.dispatcher"
             let Write = ""
             data.forEach(function(item, index) {
                 var protocol
+                var colorShow = "red"
                 if (item.type == "vmess") {
                     protocol = "VMess"
                 } else if (item.type == "shadowsocks") {
@@ -120,13 +121,36 @@ local dsp = require "luci.dispatcher"
                 } else {
                     protocol = "Unknown"
                 }
-                Write += '<div class="pure-u-1-4 check"><div class="block pure-g"><div class="pure-u-2-3"><h4>'
-                Write += protocol + '<br/><span class="red">'
-                Write += item.alias + '</span></h4></div></div></div></div>';
+                if (item.enable == "1") {
+                    colorShow = "green"
+                }
+                Write += '<div class="pure-u-1-4 check" id="' + item.id + '"><div class="block pure-g" onclick="jumpToPeer(\'' + item.id + '\')"><div class="pure-u-2-3"><h4>'
+                Write += protocol + '<br/><span class="' + colorShow + '">'
+                Write += item.alias + '</span></h4><h4 id="delay">...</h4></div></div></div></div>';
             });
             document.getElementById("peers").innerHTML = Write;
+            test_delay(data);
         }
     }
     xhr.open('GET', urlGet, true);
     xhr.send('');
+    function jumpToPeer(id) {
+        window.location.href = '<%=dsp.build_url("admin/services/bypass2ray/outbound")%>' + '/' + id
+    }
+    function test_delay(data) {
+        data.forEach(function(item, index) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    var resp = xhr.response;
+                    if (resp == null || resp == "") {
+                        return
+                    }
+                    document.getElementById(item.id).querySelectorAll('h4')[1].innerHTML = resp;
+                }
+            }
+            xhr.open('GET', '<%=dsp.build_url("admin/services/bypass2ray/get_outbound_delay")%>' + "?sid=" + item.id, true);
+            xhr.send('');
+        });
+    }
 </script>

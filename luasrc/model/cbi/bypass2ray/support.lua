@@ -113,7 +113,19 @@ function GetSubScribePeerInfo(sid)
         local StrSlice = {}
         StrSlice["alias"] = s["alias"]
         StrSlice["type"] = s["protocol"]
+        StrSlice["id"] = s[".name"]
+        StrSlice["enable"] = s["enable"]
         table.insert(All, StrSlice)
     end)
     return All
+end
+
+function urlEncode(s)
+    s = string.gsub(s, "([^%w%.%- ])", function(c) return string.format("%%%02X", string.byte(c)) end)
+   return string.gsub(s, " ", "+")
+end
+
+function urlDecode(s)
+   s = string.gsub(s, '%%(%x%x)', function(h) return string.char(tonumber(h, 16)) end)
+   return s
 end
