@@ -47,7 +47,7 @@ if m.uci:get(appname, uuid) == "routing_rule" then
 			if t["enable"] ~= "1" then
 				return
 			end
-			o:value(t["tag"], translate(t["alias"]))
+			o:value(t["tag"], t["alias"])
 		end
 	end)
 
@@ -65,7 +65,7 @@ if m.uci:get(appname, uuid) == "routing_rule" then
 			if t["enable"] ~= "1" then
 				return
 			end
-			o:value(t["tag"], translate(t["alias"]))
+			o:value(t["tag"], t["alias"])
 		end
 	end)
 
