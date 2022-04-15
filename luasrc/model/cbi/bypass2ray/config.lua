@@ -10,7 +10,7 @@ if not config_file or util.trim(config_file) == "" then
 	config_file = "/tmp/bypass2ray/" .. appname .. "_run.json"
 end
 
-local config_content = fs.readfile(config_file) or translate("Failed to open file.")
+local config_content = fs.readfile(config_file) or translate("Null")
 
 local m
 

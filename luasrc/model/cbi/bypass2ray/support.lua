@@ -24,6 +24,19 @@ function url(...)
     return require "luci.dispatcher".build_url(url)
 end
 
+function get_all_log_filename()
+    local tempdir = uci:get(appname, "global", "tmp_dir") or "/tmp/bypass2ray"
+    if tempdir ~= nil and tempdir ~= "" then
+        local exist = luci.sys.exec("ls " .. tempdir .. "/all.log" .. " 2>/dev/null")
+        if exist == "" then
+            return nil
+        end
+        return tempdir .. "/all.log"
+    else
+        return nil
+    end
+end
+
 function get_access_log_filename()
     local access_log = uci:get(appname, "global", "access_log")
     if access_log ~= nil and access_log ~= "" and access_log ~= "/dev/null" then

@@ -55,28 +55,35 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or false
 end
 
-o = s:option(DummyValue, "inboundtag", translate("Inbound Tag"))
+o = s:option(DummyValue, "inboundtag", translate("Inbound Alias"))
 o.cfgvalue = function (_, n)
-	local Value = uci:get(appname, n, "inboundtag")
-	if type(Value) == "table" then
-		if table.getn(Value) <= 0 then
-			return "-"
-		end
-		local str = ""
-		for K, V in ipairs(Value) do
-			if K == table.getn(Value) then
-				str = str .. V
-			else
-				str = str .. V .. ", "
-			end
-		end
-		return str
-	else
+	local Value = uci:get_list(appname, n, "inboundtag")
+	if Value == nil or table.getn(Value) <= 0 then
 		return "-"
 	end
+	local R = {}
+	for _, v in pairs(Value) do
+		local V
+		uci:foreach(appname, "inbound", function(s)
+			if s["tag"] == nil or s["tag"] ~= v then
+				return
+			end
+			if s["alias"] ~= nil and s["alias"] ~= "" then
+				V = s["alias"]
+			else
+				V = "?"
+			end
+		end)
+		if V == nil or V == "" then
+			table.insert(R, "-")
+		else
+			table.insert(R, V)
+		end
+	end
+	return jsonc.stringify(R, 1)
 end
 
-o = s:option(DummyValue, "outboundtag", translate("Outbound Tag"))
+o = s:option(DummyValue, "outboundtag", translate("Outbound Alias"))
 o.cfgvalue = function (_, n)
 	local Value = uci:get(appname, n, "outboundtag")
 	if Value == nil or Value == "" then
@@ -98,24 +105,6 @@ o.cfgvalue = function (_, n)
 	else
 		return V
 	end
-	--[[
-	if type(Value) == "table" then
-		if table.getn(Value) <= 0 then
-			return "-"
-		end
-		local str = ""
-		for K, V in ipairs(Value) do
-			if K == table.getn(Value) then
-				str = str .. V
-			else
-				str = str .. V .. ", "
-			end
-		end
-		return str
-	else
-		return "-"
-	end
-	--]]
 end
 
 o = s:option(DummyValue, "balancertag", translate("Balancer Tag"))
@@ -160,15 +149,11 @@ o.cfgvalue = function (_, n)
 		if table.getn(Value) <= 0 then
 			return "-"
 		end
-		local str = ""
-		for K, V in ipairs(Value) do
-			if K == table.getn(Value) then
-				str = str .. V
-			else
-				str = str .. V .. ", "
-			end
+		local S = {}
+		for _, V in ipairs(Value) do
+			table.insert(S, V)
 		end
-		return str
+		return jsonc.stringify(S, 1)
 	else
 		return "-"
 	end

@@ -41,6 +41,8 @@ function index()
     entry({"admin", "services", appname, "connect_status"}, call("connect_status"))
     entry({"admin", "services", appname, "status"}, call("action_status"))
 	entry({"admin", "services", appname, "version"}, call("action_version"))
+	entry({"admin", "services", appname, "get_bypass2ray_log"}, call("get_bypass2ray_log"))
+	entry({"admin", "services", appname, "clear_bypass2ray_log"}, call("clear_bypass2ray_log"))
 	entry({"admin", "services", appname, "get_all_log"}, call("get_all_log"))
 	entry({"admin", "services", appname, "clear_all_log"}, call("clear_all_log"))
 	entry({"admin", "services", appname, "get_access_log"}, call("get_access_log"))
@@ -130,12 +132,28 @@ function connect_status()
 	luci.http.write_json(e)
 end
 
-function get_all_log()
+function get_bypass2ray_log()
 	luci.http.write(luci.sys.exec("[ -f '/tmp/bypass2ray.log' ] && cat /tmp/bypass2ray.log"))
 end
 
-function clear_all_log()
+function clear_bypass2ray_log()
 	luci.sys.call("echo -n '' > /tmp/bypass2ray.log")
+end
+
+function get_all_log()
+	local filename = support.get_all_log_filename()
+	local result
+	if filename ~= nil then
+		result = luci.sys.exec("[ -f '" .. filename .. "' ] && cat " .. filename)
+	end
+	luci.http.write(result)
+end
+
+function clear_all_log()
+	local filename = support.get_all_log_filename()
+	if filename ~= nil then
+		luci.sys.call("echo -n '' > " .. filename)
+	end
 end
 
 function get_access_log()
@@ -211,7 +229,7 @@ function get_outbound_delay_inside(id)
 	end
 	local pingStr = sys.exec(string.format("echo -n $(tcping -q -c 1 -i 1 -t 2 -p %s %s 2>&1 | grep -o 'time=[0-9].*' | awk -F '=' '{print $2}' | awk '{print $1}') 2>/dev/null", port, address))
 	if pingStr == nil or pingStr == "" then
-		return "timeout"
+		return "Timeout"
 	end
 	local ping = tonumber(pingStr)
 	if math.floor(ping + 0.5) == 0 then

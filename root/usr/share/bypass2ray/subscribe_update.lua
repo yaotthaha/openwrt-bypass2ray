@@ -21,7 +21,7 @@ end
 local alias = cfg["alias"] or "?"
 local url = cfg["url"]
 local mode = cfg["mode"] or "1"
-local shell = cfg["shell"] or "curl -kfsSL '::url::' --user-agent 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36' --retry 3 --connect-timeout 3"
+local shell = cfg["shell"] or "curl -kfsSL '::url::' --user-agent '\'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36\'' --retry 3 --connect-timeout 3 --max-time 30"
 local include = cfg["include"]
 local exclude = cfg["exclude"]
 

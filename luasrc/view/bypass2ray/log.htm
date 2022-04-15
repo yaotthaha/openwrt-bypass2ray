@@ -2,130 +2,96 @@
 local support = require "luci.model.cbi.bypass2ray.support"
 -%>
 
-<fieldset class="cbi-section" id="_log_fieldset">
-	<input id="all_log" class="btn cbi-button cbi-button-save" type="button" onclick="set_now(1)" value="<%:All Log%>" style="margin-right:10px;"/>
-	<%
-		local access_log_filename = support.get_access_log_filename()
-		if access_log_filename ~= nil or true then
-			print('<input id="access_log" class="btn cbi-button cbi-button-apply" type="button" onclick="set_now(2)" value="Access Log" style="margin-right:10px;"/>')
-		end
-	-%>
-	<%
-		local error_log_filename = support.get_error_log_filename()
-		if error_log_filename ~= nil or true then
-			print('<input id="error_log" class="btn cbi-button cbi-button-apply" type="button" onclick="set_now(3)" value="Error Log" style="margin-right:10px;"/>')
-		end
-	-%>
-	<input id="clear_log" class="btn cbi-button cbi-button-reset" type="button" onclick="clear_log_func()" value="<%:Clear Log%>" style="margin-left:100px;"/>
-	<textarea id="log_textarea" class="cbi-input-textarea" style="width: 100%;margin-top: 10px;" data-update="change" rows="40" wrap="off" readonly="readonly"></textarea>
-</fieldset>
+<html>
+<div id="logmenu" style>
+    <ul class="tabs">
+        <li class="tabmenu-item-bypass2ray_log active" id="li_bypass2ray_log">
+            <a id="bypass2ray_log" onclick="change_log('li_bypass2ray_log')" style="cursor: pointer;">
+                Main Log
+            </a>
+        </li>
+        <%
+		    local all_log_filename = support.get_all_log_filename()
+		    if all_log_filename ~= nil then
+    			print('<li class="tabmenu-item-all_log " id="li_all_log"><a id="all_log" onclick="change_log(\'li_all_log\')" style="cursor: pointer;">All Log</a></li>')
+		    end
+	    -%>
+        <%
+		    local access_log_filename = support.get_access_log_filename()
+		    if access_log_filename ~= nil then
+    			print('<li class="tabmenu-item-access_log " id="li_access_log"><a id="access_log" onclick="change_log(\'li_access_log\')" style="cursor: pointer;">Acccess Log</a></li>')
+		    end
+	    -%>
+	    <%
+    		local error_log_filename = support.get_error_log_filename()
+		    if error_log_filename ~= nil then
+    			print('<li class="tabmenu-item-error_log " id="li_error_log"><a id="error_log" onclick="change_log(\'li_error_log\')" style="cursor: pointer;">Error Log</a></li>')
+		    end
+	    -%>
+    </ul>
+    <input id="clear_log" class="btn cbi-button cbi-button-reset" type="button" onclick="clearlogfunc()" value='<%:Clear Log%>'/>
+    <textarea id="log_textarea" class="cbi-input-textarea" style="width: 100%;margin-top: 10px;" data-update="change" rows="40" wrap="off" readonly="readonly"></textarea>
+</div>
 
-<script type="text/javascript">//<![CDATA[
-	var now = 1
-	var mode = 0
-	var all_log = "";
-	var access_log = "";
-	var error_log = "";
-	var tagArray = new Array();
-	tagArray[1] = "all_log";
-	tagArray[2] = "access_log";
-	tagArray[3] = "error_log";
-	if (document.getElementById('access_log') != null) {
-		mode++
-	}
-	if (document.getElementById('error_log') != null) {
-		mode++
-	}
-	XHR.poll(5, '<%=support.url("get_all_log")%>', null,
-		function(x, data) {
-			if(x && x.status == 200) {
-				all_log = x.responseText;
-			}
-		}
-	);
-	if (mode == 1) {
-		XHR.poll(5, '<%=support.url("get_access_log")%>', null,
+<script type="text/javascript">
+    var doc = document.querySelector('div#logmenu');
+    var now_li_id = doc.querySelector('#li_bypass2ray_log').getAttribute('id'); // li_bypass2ray_log
+    var logall = ["bypass2ray_log"]
+    //
+    var textarea = "";
+    function GetLog(name) { // name => li_bypass2ray_log
+        if (now_li_id != name) {
+            return
+        }
+        XHR.get('<%=support.url("get_")%>' + name.replace('li_', ''), null,
 			function(x, data) {
 				if(x && x.status == 200) {
-					access_log = x.responseText;
+					textarea = x.responseText;
 				}
 			}
 		);
-	}
-	if (mode == 2) {
-		XHR.poll(5, '<%=support.url("get_error_log")%>', null,
-			function(x, data) {
-				if(x && x.status == 200) {
-					error_log = x.responseText;
-				}
-			}
-		);
-	}
-	function flush_log() {
-		var log_textarea = document.getElementById('log_textarea');
-		if (now == 1) {
-			log_textarea.innerHTML = all_log;
-		}
-		if (now == 2) {
-			log_textarea.innerHTML = access_log;
-		}
-		if (now == 3) {
-			log_textarea.innerHTML = error_log;
-		}
-	}
-	function clear_all_log_func(btn) {
-		XHR.get('<%=support.url("clear_all_log")%>', null,
-			function(x, data) {
-				if(x && x.status == 200) {
-					var log_textarea = document.getElementById('log_textarea');
-					log_textarea.innerHTML = "";
-					log_textarea.scrollTop = log_textarea.scrollHeight;
-				}
-			}
-		);
-	}
-	function clear_access_log_func(btn) {
-		XHR.get('<%=support.url("clear_access_log")%>', null,
-			function(x, data) {
-				if(x && x.status == 200) {
-					var log_textarea = document.getElementById('log_textarea');
-					log_textarea.innerHTML = "";
-					log_textarea.scrollTop = log_textarea.scrollHeight;
-				}
-			}
-		);
-	}
-	function clear_error_log_func(btn) {
-		XHR.get('<%=support.url("clear_error_log")%>', null,
-			function(x, data) {
-				if(x && x.status == 200) {
-					var log_textarea = document.getElementById('log_textarea');
-					log_textarea.innerHTML = "";
-					log_textarea.scrollTop = log_textarea.scrollHeight;
-				}
-			}
-		);
-	}
-	function clear_log_func(btn) {
-		if (now == 1) {
-			clear_all_log_func(btn);
-		}
-		if (now == 2) {
-			clear_access_log_func(btn);
-		}
-		if (now == 3) {
-			clear_error_log_func(btn);
-		}
-	}
-	function set_now(n) {
-		var now_old = now;
-		if (n == now_old) {
-			return
-		}
-		now = n;
-		document.querySelector('#' + tagArray[now_old]).setAttribute('class', 'btn cbi-button cbi-button-apply');
-		document.querySelector('#' + tagArray[n]).setAttribute('class', 'btn cbi-button cbi-button-save');
-	}
-	self.setInterval("flush_log()", 1000);
-	//]]>
+    }
+    function ClearLog(name) {
+        XHR.get('<%=support.url("clear_")%>' + name.replace('li_', ''), null, null);
+        textarea = "";
+    }
+    function flush_textarea() {
+        var t = document.getElementById('log_textarea');
+        t.innerHTML = textarea;
+        t.scrollTop = t.scrollHeight;
+    }
+    self.setInterval("flush_textarea()", 100);
+    GetLog(now_li_id);
+    flush_textarea();
+    self.setInterval("GetLog('li_bypass2ray_log')", 4000);
+    if (doc.querySelector('#li_all_log') != null) {
+        logall.push("all_log");
+        self.setInterval("GetLog('li_all_log')", 4000);
+    }
+    if (doc.querySelector('#li_access_log') != null) {
+        logall.push("access_log");
+        self.setInterval("GetLog('li_access_log')", 4000);
+    }
+    if (doc.querySelector('#li_error_log') != null) {
+        logall.push("error_log");
+        self.setInterval("GetLog('li_error_log')", 4000);
+    }
+    function change_log(li_id) {
+        if (li_id == now_li_id) {
+            return
+        }
+        var li = doc.querySelector('#' + li_id);
+        var now_li = doc.querySelector('#' + now_li_id);
+        now_li.setAttribute('class', now_li.getAttribute('class').replace('active', ''))
+        li.setAttribute('class', li.getAttribute('class') + "active");
+        textarea = "";
+        flush_textarea();
+        now_li_id = li_id;
+        GetLog(now_li_id);
+        flush_textarea();
+    }
+    function clearlogfunc() {
+        ClearLog(now_li_id);
+    }
 </script>
+</html>

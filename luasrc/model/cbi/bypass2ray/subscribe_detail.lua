@@ -23,7 +23,7 @@ o = s:option(Value, "url", translate("URL"))
 o.datatype = "string"
 
 o = s:option(Value, "shell", translate("Shell"), translate("Use `::url::` Instead $URL"))
-local shell_default = "curl -kfsSL '::url::' --user-agent 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36' --retry 3 --connect-timeout 3"
+local shell_default = "curl -kfsSL '::url::' --user-agent '\'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36\'' --retry 3 --connect-timeout 3 --max-time 30"
 o.placeholder = shell_default
 o.default = shell_default
 
@@ -35,6 +35,30 @@ o = s:option(ListValue, "mode", translate("Match Mode"))
 o:value("1", translate("Include --> Exclude"))
 o:value("2", translate("Exclude --> Include"))
 o.default = "1"
+
+o = s:option(Button, "_update", translate("Update"))
+o.inputstyle = "save"
+function o.write(t, n)
+    sys.call("lua /usr/share/bypass2ray/subscribe_update.lua " .. n .. " >/dev/null 2>&1 &")
+end
+
+o = s:option(Button, "_delete_all", translate("Delete All Peers(Outbounds)"))
+o.inputstyle = "reset"
+function o.write(t, n)
+    uci:foreach(appname, "outbound", function(s)
+        if s["subscribe_tag"] == n then
+            uci:delete(appname, s[".name"])
+        end
+    end)
+    uci:commit(appname)
+end
+
+o = s:option(Button, "_delete_list", translate("Delete Peer List"))
+o.inputstyle = "reset"
+function o.write(t, n)
+    uci:delete(appname, n, "peerlist")
+    uci:commit(appname)
+end
 
 m:append(Template(appname .. "/subscribe_list"))
 

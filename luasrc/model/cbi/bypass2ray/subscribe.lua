@@ -25,15 +25,14 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "?"
 end
 
-o = s:option(DummyValue, "tag", translate("Tag"))
-o.cfgvalue = function (...)
-	return Value.cfgvalue(...) or "-"
+o = s:option(Button, "_update", translate("Update"))
+o.inputstyle = "save"
+function o.write(t, n)
+    sys.call("lua /usr/share/bypass2ray/subscribe_update.lua " .. n .. " >/dev/null 2>&1 &")
 end
 
--- Delete
-
 o = s:option(Button, "_delete_all", translate("Delete All Peers(Outbounds)"))
-o.inputstyle = "apply"
+o.inputstyle = "reset"
 function o.write(t, n)
     uci:foreach(appname, "outbound", function(s)
         if s["subscribe_tag"] == n then
@@ -44,16 +43,10 @@ function o.write(t, n)
 end
 
 o = s:option(Button, "_delete_list", translate("Delete Peer List"))
-o.inputstyle = "apply"
+o.inputstyle = "reset"
 function o.write(t, n)
     uci:delete(appname, n, "peerlist")
     uci:commit(appname)
-end
-
-o = s:option(Button, "_update", translate("Update"))
-o.inputstyle = "apply"
-function o.write(t, n)
-    sys.call("lua /usr/share/bypass2ray/subscribe_update.lua " .. n .. " >/dev/null 2>&1 &")
 end
 
 return m

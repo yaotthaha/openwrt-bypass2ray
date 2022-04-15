@@ -833,10 +833,12 @@ for _, v in ipairs(OutboundCfg) do
                 tls["certificates"] = {}
                 table.insert(tls["certificates"], certificates)
             end
-            if xtls then
-                streamSettings["xtlsSettings"] = tls
-            else
-                streamSettings["tlsSettings"] = tls
+            if next(tls) ~= nil then
+                if xtls then
+                    streamSettings["xtlsSettings"] = tls
+                else
+                    streamSettings["tlsSettings"] = tls
+                end
             end
         end
         if v["ss_network"] == "tcp" then
