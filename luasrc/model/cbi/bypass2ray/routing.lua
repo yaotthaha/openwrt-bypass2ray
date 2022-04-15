@@ -107,7 +107,7 @@ o.cfgvalue = function (_, n)
 	end
 end
 
-o = s:option(DummyValue, "balancertag", translate("Balancer Tag"))
+o = s:option(DummyValue, "balancertag", translate("BalancerTag"))
 o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "-"
 end

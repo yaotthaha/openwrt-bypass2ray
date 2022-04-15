@@ -51,7 +51,7 @@ o.datatype = "file"
 o.placeholder = "/usr/bin/xray"
 o.default = "/usr/bin/xray"
 
-o = s:option(Value, "resource_location", translate("Resource Location"), translate("Directory where geoip.dat and geosite.dat files are, default: same directory as Xray file."))
+o = s:option(Value, "resource_location", translate("Resource Location"))
 o.datatype = "directory"
 o.placeholder = "/usr/share/bypass2ray"
 o.default = "/usr/share/bypass2ray"

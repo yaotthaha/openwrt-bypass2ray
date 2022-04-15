@@ -1,65 +1,131 @@
-msgid "ByPass2Ray"
-msgstr "ByPass2Ray"
+msgid "Null"
+msgstr "空"
 
-msgid "Global"
-msgstr "全局"
-
-msgid "Enabled"
-msgstr "启用"
-
-msgid "Restart Service"
-msgstr "重启服务"
-
-msgid "Ray binary file"
-msgstr "Ray 二进制文件"
-
-msgid "Collecting data..."
-msgstr "收集信息..."
-
-msgid "Resource Location"
-msgstr "资源文件位置"
-
-msgid "Custom Config file"
-msgstr "自定义配置文件"
-
-msgid "Use custom config file"
-msgstr "使用自定义配置文件"
-
-msgid "None"
-msgstr "无"
-
-msgid "Access log file"
-msgstr "访问日志文件"
-
-msgid "Error log file"
-msgstr "错误日志文件"
-
-msgid "Log level"
-msgstr "日志等级"
-
-msgid "Inbound"
-msgstr "入站"
+msgid "Config"
+msgstr "配置"
 
 msgid "Alias"
-msgstr "别名"
+msgstr "标签"
 
-msgid "Listen"
-msgstr "监听"
+msgid "Enable"
+msgstr "启用"
 
 msgid "Port"
 msgstr "端口"
 
+msgid "Global"
+msgstr "全局"
+
+msgid "None"
+msgstr "无"
+
+msgid "Debug"
+msgstr "调试"
+
+msgid "Info"
+msgstr "信息"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Listen"
+msgstr "监听"
+
+msgid "Email"
+msgstr "邮箱"
+
+msgid "Method"
+msgstr "方法"
+
+msgid "Auth"
+msgstr "认证"
+
+msgid "Flow"
+msgstr "流控"
+
+msgid "Usage"
+msgstr "用法"
+
+msgid "Path"
+msgstr "路径"
+
+msgid "Off"
+msgstr "关"
+
+msgid "Log"
+msgstr "日志"
+
+msgid "Delay"
+msgstr "延迟"
+
+msgid "User"
+msgstr "用户"
+
+msgid "Pass"
+msgstr "密码"
+
+msgid "Rule"
+msgstr "规则"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Domain"
+msgstr "域名"
+
+msgid "Source"
+msgstr "源"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "ClientIP"
+msgstr "客户端 IP"
+
+msgid "Temp Dir"
+msgstr "临时文件夹"
+
 msgid "Protocol"
 msgstr "协议"
 
-msgid "Tag"
-msgstr "入站标识"
+msgid "Password"
+msgstr "密码"
 
-msgid "Edit Inbound"
-msgstr "编辑入站"
+msgid "Security"
+msgstr "安全性"
+
+msgid "Key File"
+msgstr "密钥文件"
+
+msgid "Strategy"
+msgstr "策略"
+
+msgid "Outbound"
+msgstr "出站"
+
+msgid "Redirect"
+msgstr "重定向"
+
+msgid "Balancer"
+msgstr "均衡器"
+
+msgid "Selector"
+msgstr "选择器"
 
 msgid "Address"
 msgstr "地址"
+
+msgid "Domains"
+msgstr "域名"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "DNS Log"
+msgstr "DNS 日志"
+
+msgid "Inbound"
+msgstr "入站"
 
 msgid "Network"
 msgstr "网络"
@@ -67,209 +133,347 @@ msgstr "网络"
 msgid "Timeout"
 msgstr "超时"
 
-msgid "Address of the destination server."
-msgstr "将流量转发到此地址"
-
-msgid "Port of the destination server."
-msgstr "将流量转发到此端口"
-
-msgid "Follow redirect"
-msgstr "自动转发"
-
-msgid "If transparent proxy enabled on current inbound, this option will be ignored."
-msgstr "如果在当前入站连接上启用透明代理，此选项会被忽略"
-
-msgid "Account user"
-msgid "账户用户名"
-
-msgid "Account password"
-msgstr "账户密码"
-
-msgid "Allow transparent"
-msgstr "转发所有 HTTP 请求"
-
-msgid "Time limit for inbound data(seconds)"
-msgstr "入站数据的时间限制（秒）"
-
-msgid "Method"
-msgstr "加密方式"
-
-msgid "Password"
-msgid "密码"
-
-msgid "User level"
-msgstr "用户等级"
-
-msgid "One Time Auth (OTA)"
-msgstr "一次性认证（OTA）"
-
-msgid "Auth"
-msgstr "认证"
-
 msgid "No Auth"
 msgstr "无认证"
 
-msgid "When UDP is enabled, Ray needs to know the IP address of current host."
-msgstr "当 UDP 启用时，Ray 需要知道当前服务器的 IP 地址"
+msgid "Headers"
+msgstr "头部"
 
-msgid "Client ID"
-msgstr "客户端 ID"
+msgid "Enabled"
+msgstr "已启用"
 
-msgid "Client alter ID"
-msgstr "用户 Alter ID"
+msgid "Refresh"
+msgstr "刷新"
 
-msgid "Default Alter ID"
-msgstr "默认 Alter ID"
+msgid "Scripts"
+msgstr "脚本"
 
-msgid "Detour to"
-msgstr "转发到"
+msgid "Routing"
+msgstr "路由"
 
-msgid "Optional feature to suggest client to take a detour. If specified, this inbound will instruct the outbound to use another inbound."
-msgstr "建议客户端自动绕路，指定后将指示出站连接使用另一个入站连接"
+msgid "DisableCache"
+msgstr "禁用缓存"
 
-msgid "Disable insecure encryption"
-msgstr "禁止不安全的加密方式"
+msgid "InboundTag"
+msgstr "入站标识"
 
-msgid "Flow"
-msgstr "流控"
+msgid "DNS Global Settings"
+msgstr "DNS 全局设置"
 
-msgid "Decryption"
-msgstr "解密"
+msgid "Inbound Alias"
+msgstr "入站标签"
 
-msgid "Fallback Name"
-msgstr "回落配置名"
+msgid "Outbound Alias"
+msgstr "出站标签"
+
+msgid "DisableFallback"
+msgstr "禁用回落"
+
+msgid "DisableFallbackIfMatch"
+msgstr "禁用回落（若匹配）"
 
 msgid "Fallback ALPN"
 msgstr "回落 ALPN"
 
-msgid "Fallback Path"
-msgstr "回落目录"
+msgid "Default Alter ID"
+msgstr "默认 Alter ID"
 
-msgid "Fallback Dest"
-msgstr "回落去向"
+msgid "Server Name"
+msgstr "服务名称"
 
-msgid "Fallback Xver"
-msgstr "回落真实头版本"
+msgid "Allow Transparent"
+msgstr "允许透明"
 
-msgid "Stream settings"
-msgstr "底层传输配置"
-
-msgid "Security"
-msgstr "加密"
-
-msgid "Server name"
-msgstr "服务器证书名"
-
-msgid "Reject Unknown Sni"
-msgstr "拒绝未知SNI"
-
-msgid "Allow insecure"
-msgstr "允许不安全连接"
-
-msgid "Allow insecure ciphers"
-msgstr "允许不安全的加密方式"
-
-msgid "Disable system root"
-msgstr "禁用系统自带的 CA 证书"
-
-msgid "TLS Client Hello"
-msgstr "TLS指纹"
-
-msgid "Certificate usage"
-msgstr "证书用途"
-
-msgid "Certificate file"
-msgstr "证书文件"
-
-msgid "Key file"
-msgstr "密钥文件"
-
-msgid "Header type"
-msgstr "请求头类型"
-
-msgid "HTTP request version"
-msgstr "HTTP 请求版本"
-
-msgid "HTTP request method"
-msgstr "HTTP 请求方法"
-
-msgid "Request path"
-msgstr "请求目录"
-
-msgid "Request headers"
-msgstr "请求头"
-
-msgid "HTTP response version"
-msgstr "HTTP 响应版本"
-
-msgid "HTTP response status"
-msgstr "HTTP 响应状态"
-
-msgid "HTTP response reason"
-msgstr "HTTP 响应说明"
-
-msgid "Response headers"
-msgstr "响应头"
-
-msgid "Maximum transmission unit (MTU)"
-msgstr "最大传输单元（MTU）"
-
-msgid "传输时间间隔（TTI）"
-msgstr "Transmission time interval (TTI)"
-
-msgid "Uplink capacity"
+msgid "Uplink Capacity"
 msgstr "上行链路容量"
 
-msgid "Downlink capacity"
-msgstr "下行链路容量"
+msgid "After Start Scripts"
+msgstr "启动后脚本"
 
-msgid "Congestion enabled"
-msgstr "启用拥塞控制"
+msgid "Certificate File"
+msgstr "证书文件"
 
-msgid "Read buffer size"
-msgstr "读取缓冲区大小"
+msgid "QueryStrategy"
+msgstr "查询策略"
 
-msgid "Write buffer size"
-msgstr "写入缓冲区大小"
-
-msgid "Headers"
-msgstr "HTTP 头"
-
-msgid "Host"
-msgstr "主机域名"
-
-msgid "ServiceName"
-msgstr "服务名"
-
-msgid "MultiMode"
-msgstr "多开模式"
-
-msgid "IdleTimeout"
-msgstr "idle超时时间"
-
-msgid "HealthCheckTimeout"
-msgstr "健康检查超时时间"
-
-msgid "PermitWithoutStream"
-msgstr "允许在没有子连接时进行健康检查"
-
-msgid "TCP fast open"
-msgstr "TCP 快速打开"
-
-msgid "If transparent proxy enabled on current inbound, this option will be ignored."
-msgstr "如果在当前入站连接上启用透明代理，此选项会被忽略"
-
-msgid "dialerProxy"
-msgstr "出站代理标识"
-
-msgid "MetadataOnly"
-msgstr "元数据嗅探"
-
-msgid "RouteOnly"
-msgstr "仅路由"
+msgid "One Time Auth (OTA)"
+msgstr "OTA"
 
 msgid "Edit Outbound"
-msgstr "编辑出站"
+msgstr "编辑 出站"
 
-msgid "Dial"
-msgstr "连接地址"
+msgid "Downlink Capacity"
+msgstr "下行链路容量"
+
+msgid "Client ID"
+msgstr "客户端 ID"
+
+msgid "Multi Mode"
+msgstr "多发模式"
+
+msgid "Match Mode"
+msgstr "匹配模式"
+
+msgid "Fallback Dest"
+msgstr "回落目的地"
+
+msgid "Read Idle Timeout"
+msgstr "读取闲置超时"
+
+msgid "Easy Mode"
+msgstr "简单模式"
+
+msgid "Blackhole"
+msgstr "黑洞"
+
+msgid "SubScribe"
+msgstr "订阅"
+
+msgid "Follow Redirect"
+msgstr "允许重定向"
+
+msgid "Delete Peer List"
+msgstr "删除节点列表"
+
+msgid "User level"
+msgstr "用户等级"
+
+msgid "Idle Timeout"
+msgstr "闲置超时"
+
+msgid "DNS Server Address"
+msgstr "DNS 服务器地址"
+
+msgid "DNS Server Port"
+msgstr "DNS 服务器端口"
+
+msgid "DNS Servers"
+msgstr "DNS 服务器"
+
+msgid "Enable Session Resumption"
+msgstr "允许会话恢复"
+
+msgid "Domains Excluded"
+msgstr "不包含域名"
+
+msgid "Read Buffer Size"
+msgstr "读取缓冲区大小"
+
+msgid "Write Buffer Size"
+msgstr "写入缓冲区大小"
+
+msgid "Error log file"
+msgstr "错误日志文件"
+
+msgid "Routing Global Settings"
+msgstr "路由全局设置"
+
+msgid "Request Headers"
+msgstr "请求头部"
+
+msgid "Response Headers"
+msgstr "返回头部"
+
+msgid "Health Check Timeout"
+msgstr "健康检查超时"
+
+msgid "Wechat Video"
+msgstr "微信通话"
+
+msgid "Config File: "
+msgstr "配置文件："
+
+msgid "Disable Insecure Encryption"
+msgstr "禁用不安全的加密"
+
+msgid "Min Version"
+msgstr "最低版本"
+
+msgid "Max Version"
+msgstr "最高版本"
+
+msgid "If Flow isn't nil, then tls change to xtls"
+msgstr "若流控不为空，则设置为xtls而不是tls"
+
+msgid "Permit Without Stream"
+msgstr "允许没有流通过时检查"
+
+msgid "Log level"
+msgstr "日志等级"
+
+msgid "Delete All Peers(Outbounds)"
+msgstr "删除所有节点（出站）"
+
+msgid "Client Alter ID"
+msgstr "客户端 Alter ID"
+
+msgid "Route Only"
+msgstr "仅路由"
+
+msgid "Client email"
+msgstr "客户端邮箱"
+
+msgid "Request Method"
+msgstr "请求方法"
+
+msgid "Fallback Name"
+msgstr "回落名称"
+
+msgid "Service Name"
+msgstr "服务名称"
+
+msgid "Concurrency"
+msgstr "并发"
+
+msgid "Collecting data..."
+msgstr "收集数据..."
+
+msgid "Reject Unknown SNI"
+msgstr "拒绝未知的 SNI"
+
+msgid "Detour To"
+msgstr "绕道到"
+
+msgid "OneTimeLoading"
+msgstr "一次性读取"
+
+msgid "Access log file"
+msgstr "访问日志文件"
+
+msgid "Use custom config file."
+msgstr "使用自定义配置文件"
+
+msgid "Congestion Enabled"
+msgstr "启用拥堵控制"
+
+msgid "Decryption"
+msgstr "解密"
+
+msgid "Encryption"
+msgstr "加密"
+
+msgid "Metadata Only"
+msgstr "仅元数据"
+
+msgid "After Stop Scripts"
+msgstr "结束后脚本"
+
+msgid "TCP Fast Open"
+msgstr "TCP 快速打开"
+
+msgid "Edit Inbound"
+msgstr "编辑 入站"
+
+msgid "Account Password"
+msgstr "账户密码"
+
+msgid "Fallback Path"
+msgstr "回落路径"
+
+msgid "Request Path"
+msgstr "请求路径"
+
+msgid "OCSP Stapling"
+msgstr "OCSP 装订"
+
+msgid "Mark Output"
+msgstr "发出的数据包的 SO_Mark"
+
+msgid "DomainStrategy"
+msgstr "域名策略"
+
+msgid "Invalid Ray file"
+msgstr "非法 Ray 配置文件"
+
+msgid "Response Reason"
+msgstr "返回原因"
+
+msgid "Use `::url::` Instead $URL"
+msgstr "使用 `::url::` 代替 $URL"
+
+msgid "Dest Override"
+msgstr "目的地覆盖"
+
+msgid "SourcePort"
+msgstr "源端口"
+
+msgid "Start Service"
+msgstr "启动服务"
+
+msgid "ExpectIPs"
+msgstr "期望 IP"
+
+msgid "Edit SubScribe"
+msgstr "编辑 订阅"
+
+msgid "Allow Insecure"
+msgstr "允许不安全"
+
+msgid "Client User level"
+msgstr "客户端用户等级"
+
+msgid "Edit DNS Server"
+msgstr "编辑 DNS 服务器"
+
+msgid "Restart Service"
+msgstr "重启服务"
+
+msgid "Response Status"
+msgstr "返回状态"
+
+msgid "Disable System Root"
+msgstr "禁用系统根证书"
+
+msgid "Can't get Ray version"
+msgstr "无法获取 Ray 版本"
+
+msgid "OutboundTag"
+msgstr "出站标识"
+
+msgid "BalancerTag"
+msgstr "均衡器标识"
+
+msgid "Before Start Scripts"
+msgstr "启动前脚本"
+
+msgid "Edit Routing"
+msgstr "编辑 路由"
+
+msgid "Before Stop Scripts"
+msgstr "结束前脚本"
+
+msgid "Other Settings"
+msgstr "其他设置"
+
+msgid "Response Type"
+msgstr "返回类型"
+
+msgid "SendThrough"
+msgstr "通过...发送"
+
+msgid "Cipher Suites"
+msgstr "加密套件"
+
+msgid "Default user level"
+msgstr "默认用户等级"
+
+msgid "Account User"
+msgstr "账户用户"
+
+msgid "Request Version"
+msgstr "请求版本"
+
+msgid "Response Version"
+msgstr "返回版本"
+
+msgid "Stop Service"
+msgstr "停止服务"
+
+msgid "Fallback Xver"
+msgstr "回落 Xver"
+
+msgid "Only Xray Support"
+msgstr "仅 Xray 支持"
+
+msgid "Header Type"
+msgstr "头部类型"

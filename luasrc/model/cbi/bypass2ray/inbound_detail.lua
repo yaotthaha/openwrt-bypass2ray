@@ -61,8 +61,7 @@ o = s:option(Value, "settings_dokodemodoor_address", "%s - %s" % { "Dokodemo-doo
 o:depends("protocol", "dokodemo-door")
 o.datatype = "host"
 
-o = s:option(Value, "settings_dokodemodoor_port", "%s - %s" % { "Dokodemo-door", translate("Port") },
-	translate("Port of the destination server."))
+o = s:option(Value, "settings_dokodemodoor_port", "%s - %s" % { "Dokodemo-door", translate("Port") })
 o:depends("protocol", "dokodemo-door")
 o.datatype = "port"
 
@@ -71,8 +70,7 @@ o:depends("protocol", "dokodemo-door")
 o:value("tcp")
 o:value("udp")
 
-o = s:option(Value, "settings_dokodemodoor_timeout", "%s - %s" % { "Dokodemo-door", translate("Timeout") },
-	translate("Time limit for inbound data(seconds)"))
+o = s:option(Value, "settings_dokodemodoor_timeout", "%s - %s" % { "Dokodemo-door", translate("Timeout") })
 o:depends("protocol", "dokodemo-door")
 o.datatype = "uinteger"
 o.placeholder = "300"
@@ -396,7 +394,7 @@ o:depends("ss_tcp_header_type", "http")
 --o.default = "/"
 
 o = s:option(DynamicList, "ss_tcp_header_request_headers", "%s - %s" % { "TCP", translate("Request Headers") },
-	translate("example: Host: www.bing.com"))
+	translate("example: Host: example.com"))
 o:depends("ss_tcp_header_type", "http")
 
 o = s:option(Value, "ss_tcp_header_response_version", "%s - %s" % { "TCP", translate("Response Version") })
@@ -412,7 +410,7 @@ o:depends("ss_tcp_header_type", "http")
 --o.placeholder = "OK"
 
 o = s:option(DynamicList, "ss_tcp_header_response_headers", "%s - %s" % { "TCP", translate("Response Headers") },
-	translate("example: Host: www.bing.com"))
+	translate("example: Host: example.com"))
 o:depends("ss_tcp_header_type", "http")
 
 -- Stream Settings - KCP
@@ -470,7 +468,7 @@ o = s:option(Value, "ss_ws_path", "%s - %s" % { "WebSocket", translate("Path") }
 o:depends("ss_network", "ws")
 
 o = s:option(DynamicList, "ss_ws_headers", "%s - %s" % { "WebSocket", translate("Headers") },
-	translate("example: Host: www.bing.com"))
+	translate("example: Host: example.com"))
 o:depends("ss_network", "ws")
 
 -- Stream Settings - HTTP/2
@@ -544,7 +542,7 @@ o:value("redirect", "Redirect")
 o:value("tproxy", "TProxy")
 o:value("off", translate("Off"))
 
-o = s:option(ListValue, "ss_sockopt_domainstrategy", "%s - %s" % { "Sockopt", translate("Domain Strategy") })
+o = s:option(ListValue, "ss_sockopt_domainstrategy", "%s - %s" % { "Sockopt", translate("DomainStrategy") })
 o:value("", translate("None"))
 o:value("AsIs")
 o:value("UseIP")

@@ -27,9 +27,9 @@ local shell_default = "curl -kfsSL '::url::' --user-agent '\'Mozilla/5.0 (X11; L
 o.placeholder = shell_default
 o.default = shell_default
 
-s:option(DynamicList, "include", translate("Include"), translate("Support Regexp"))
+s:option(DynamicList, "include", translate("Include"))
 
-s:option(DynamicList, "exclude", translate("Exclude"), translate("Support Regexp"))
+s:option(DynamicList, "exclude", translate("Exclude"))
 
 o = s:option(ListValue, "mode", translate("Match Mode"))
 o:value("1", translate("Include --> Exclude"))

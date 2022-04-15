@@ -61,7 +61,7 @@ o:value("none", "None")
 o:value("http", "HTTP")
 
 -- Settings - Freedom
-o = s:option(ListValue, "settings_freedom_domainstrategy", "%s - %s" % { "Freedom", translate("Domain Strategy") })
+o = s:option(ListValue, "settings_freedom_domainstrategy", "%s - %s" % { "Freedom", translate("DomainStrategy") })
 o:depends("protocol", "freedom")
 o:value("")
 o:value("AsIs")
@@ -435,8 +435,7 @@ o:value("none", translate("None"))
 o:value("aes-128-gcm")
 o:value("chacha20-poly1305")
 
-o = s:option(Value, "ss_quic_key", "%s - %s" % { "QUIC", translate("Key") },
-	translate("just security isn't none"))
+o = s:option(Value, "ss_quic_key", "%s - %s" % { "QUIC", translate("Key") })
 o:depends("ss_network", "quic")
 
 o = s:option(ListValue, "ss_quic_header_type", "%s - %s" % { "QUIC", translate("Header Type") })
@@ -478,7 +477,7 @@ o:value("off")
 o:value("redirect")
 o:value("tproxy")
 
-o = s:option(ListValue, "ss_sockopt_domainstrategy", "%s - %s" % { "Sockopt", translate("Domain Strategy") })
+o = s:option(ListValue, "ss_sockopt_domainstrategy", "%s - %s" % { "Sockopt", translate("DomainStrategy") })
 o:value("")
 o:value("AsIs")
 o:value("UseIP")
