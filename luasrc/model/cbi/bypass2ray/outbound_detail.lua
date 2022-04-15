@@ -61,7 +61,7 @@ o:value("none", "None")
 o:value("http", "HTTP")
 
 -- Settings - Freedom
-o = s:option(ListValue, "settings_freedom_domainstrategy", "%s - %s" % { "Freedom", translate("DomainStrategy") })
+o = s:option(ListValue, "settings_freedom_domainstrategy", "%s - %s" % { "Freedom", translate("Domain Strategy") })
 o:depends("protocol", "freedom")
 o:value("")
 o:value("AsIs")
@@ -69,7 +69,7 @@ o:value("UseIP")
 o:value("UseIPv4")
 o:value("UseIPv6")
 
-o = s:option(Value, "settings_freedom_redirect", "%s - %s" % { "Freedom", translate("Redirect") }, translate("Force send all data to this address"))
+o = s:option(Value, "settings_freedom_redirect", "%s - %s" % { "Freedom", translate("Redirect") })
 o:depends("protocol", "freedom")
 
 -- Settings - DNS
@@ -134,7 +134,7 @@ o = s:option(Value, "settings_vmess_vnext_users_id", "%s - %s" % { "VMess", "ID"
 o:depends("protocol", "vmess")
 o.rmempty = false
 
-o = s:option(Value, "settings_vmess_vnext_users_alterid", "%s - %s" % { "VMess", "alterId" })
+o = s:option(Value, "settings_vmess_vnext_users_alterid", "%s - %s" % { "VMess", "AlterId" })
 o:depends("protocol", "vmess")
 o.datatype = "and(uinteger, max(65535))"
 
@@ -246,7 +246,7 @@ o:depends("mux_enable", true)
 o.datatype = "and(uinteger, min(1), max(1024))"
 
 -- StreamSettings - Network
-o = s:option(ListValue, "ss_network", "%s - %s" % { translate("Stream settings"), translate("Network") })
+o = s:option(ListValue, "ss_network", "%s - %s" % { "Stream Settings", translate("Network") })
 o:value("")
 o:value("tcp")
 o:value("kcp")
@@ -257,50 +257,50 @@ o:value("quic")
 o:value("grpc")
 
 -- StreamSettings - Security
-o = s:option(ListValue, "ss_security_tls_enable", "%s - %s" % { translate("Stream settings"), translate("Security") },
+o = s:option(ListValue, "ss_security_tls_enable", "%s - %s" % { "Stream Settings", translate("Security") },
 	translate("If Flow isn't nil, then tls change to xtls"))
 o:value("", translate("None"))
-o:value("tls", translate("(X)TLS"))
+o:value("tls", "(X)TLS")
 
 -- StreamSettings - (X)TLS
-o = s:option(Value, "ss_tls_servername", "%s - %s" % { translate("(X)TLS"), translate("ServerName") })
+o = s:option(Value, "ss_tls_servername", "%s - %s" % { "(X)TLS", translate("Server Name") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(Flag, "ss_tls_rejectunknownsni", "%s - %s" % { translate("(X)TLS"), translate("RejectUnknownSni") })
+o = s:option(Flag, "ss_tls_rejectunknownsni", "%s - %s" % { "(X)TLS", translate("Reject Unknown SNI") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(Flag, "ss_tls_allowinsecure", "%s - %s" % { translate("(X)TLS"), translate("AllowInsecure") })
+o = s:option(Flag, "ss_tls_allowinsecure", "%s - %s" % { "(X)TLS", translate("Allow Insecure") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(MultiValue, "ss_tls_alpn", "%s - %s" % { translate("(X)TLS"), translate("ALPN") })
+o = s:option(MultiValue, "ss_tls_alpn", "%s - %s" % { "(X)TLS", translate("ALPN") })
 o:depends("ss_security_tls_enable", "tls")
 o:value("h2")
 o:value("http/1.1")
 
-o = s:option(ListValue, "ss_tls_minversion", "%s - %s" % { translate("(X)TLS"), translate("MinVersion") })
+o = s:option(ListValue, "ss_tls_minversion", "%s - %s" % { "(X)TLS", translate("Min Version") })
 o:depends("ss_security_tls_enable", "tls")
 o:value("")
 o:value("1.1")
 o:value("1.2")
 o:value("1.3")
 
-o = s:option(ListValue, "ss_tls_maxversion", "%s - %s" % { translate("(X)TLS"), translate("MaxVersion") })
+o = s:option(ListValue, "ss_tls_maxversion", "%s - %s" % { "(X)TLS", translate("Max Version") })
 o:depends("ss_security_tls_enable", "tls")
 o:value("")
 o:value("1.1")
 o:value("1.2")
 o:value("1.3")
 
-o = s:option(DynamicList, "ss_tls_ciphersuites", "%s - %s" % { translate("(X)TLS"), translate("cipherSuites") })
+o = s:option(DynamicList, "ss_tls_ciphersuites", "%s - %s" % { "(X)TLS", translate("Cipher Suites") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(Flag, "ss_tls_disablesystemroot", "%s - %s" % { translate("(X)TLS"), translate("DisableSystemRoot") })
+o = s:option(Flag, "ss_tls_disablesystemroot", "%s - %s" % { "(X)TLS", translate("Disable System Root") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(Flag, "ss_tls_enablesessionresumption", "%s - %s" % { translate("(X)TLS"), translate("EnableSessionResumption") })
+o = s:option(Flag, "ss_tls_enablesessionresumption", "%s - %s" % { "(X)TLS", translate("Enable Session Resumption") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(ListValue, "ss_tls_fingerprint", "%s - %s" % { translate("(X)TLS"), translate("Fingerprint") })
+o = s:option(ListValue, "ss_tls_fingerprint", "%s - %s" % { "(X)TLS", translate("TLS Client Hello") })
 o:depends("ss_security_tls_enable", "tls")
 o:value("", translate("None"))
 o:value("chrome")
@@ -308,87 +308,87 @@ o:value("firefox")
 o:value("safari")
 o:value("randomized")
 
-o = s:option(Value, "ss_tls_certificates_ocspstapling", "%s - %s" % { translate("(X)TLS Certificates"), translate("OcspStapling") })
+o = s:option(Value, "ss_tls_certificates_ocspstapling", "%s - %s" % { "(X)TLS Certificate", translate("OCSP Stapling") })
 o:depends("ss_security_tls_enable", "tls")
 o.datatype = "uinteger"
 
-o = s:option(Flag, "ss_tls_certificates_onetimeloading", "%s - %s" % { translate("(X)TLS Certificates"), translate("OneTimeLoading") })
+o = s:option(Flag, "ss_tls_certificates_onetimeloading", "%s - %s" % { "(X)TLS Certificate", translate("OneTimeLoading") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(ListValue, "ss_tls_certificates_usage", "%s - %s" % { translate("(X)TLS Certificates"), translate("Usage") })
+o = s:option(ListValue, "ss_tls_certificates_usage", "%s - %s" % { "(X)TLS Certificate", translate("Usage") })
 o:depends("ss_security_tls_enable", "tls")
 o:value("")
 o:value("encipherment")
 o:value("verify")
 o:value("issue")
 
-o = s:option(Value, "ss_tls_certificates_certificatefile", "%s - %s" % { translate("(X)TLS Certificates"), translate("CertificateFile") })
+o = s:option(Value, "ss_tls_certificates_certificatefile", "%s - %s" % { "(X)TLS Certificate", translate("Certificate File") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(Value, "ss_tls_certificates_keyfile", "%s - %s" % { translate("(X)TLS Certificates"), translate("KeyFile") })
+o = s:option(Value, "ss_tls_certificates_keyfile", "%s - %s" % { "(X)TLS Certificate", translate("Key File") })
 o:depends("ss_security_tls_enable", "tls")
 
 -- StreamSettings - TCP
-o = s:option(ListValue, "ss_tcp_header_type", "%s - %s" % { translate("TCP"), translate("Header Type") })
+o = s:option(ListValue, "ss_tcp_header_type", "%s - %s" % { "TCP", translate("Header Type") })
 o:depends("ss_network", "tcp")
 o:value("none", translate("None"))
 o:value("http")
 
-o = s:option(Value, "ss_tcp_header_request_version", "%s - %s" % { translate("TCP"), translate("Header Request Version") })
+o = s:option(Value, "ss_tcp_header_request_version", "%s - %s" % { "TCP", translate("Request Version") })
 o:depends("ss_tcp_header_type", "http")
 
-o = s:option(Value, "ss_tcp_header_request_method", "%s - %s" % { translate("TCP"), translate("Header Request Method") })
+o = s:option(Value, "ss_tcp_header_request_method", "%s - %s" % { "TCP", translate("Request Method") })
 o:depends("ss_tcp_header_type", "http")
 
-o = s:option(DynamicList, "ss_tcp_header_request_path", "%s - %s" % { translate("TCP"), translate("Header Request Path") })
+o = s:option(DynamicList, "ss_tcp_header_request_path", "%s - %s" % { "TCP", translate("Request Path") })
 o:depends("ss_tcp_header_type", "http")
 
-o = s:option(DynamicList, "ss_tcp_header_request_headers", "%s - %s" % { translate("TCP"), translate("Header Request Headers") },
+o = s:option(DynamicList, "ss_tcp_header_request_headers", "%s - %s" % { "TCP", translate("Request Headers") },
 	translate("example: Host: example.com"))
 o:depends("ss_tcp_header_type", "http")
 
-o = s:option(Value, "ss_tcp_header_response_version", "%s - %s" % { translate("TCP"), translate("Header Response Version") })
+o = s:option(Value, "ss_tcp_header_response_version", "%s - %s" % { "TCP", translate("Response Version") })
 o:depends("ss_tcp_header_type", "http")
 
-o = s:option(Value, "ss_tcp_header_response_status", "%s - %s" % { translate("TCP"), translate("Header Response Status") })
+o = s:option(Value, "ss_tcp_header_response_status", "%s - %s" % { "TCP", translate("Response Status") })
 o:depends("ss_tcp_header_type", "http")
 
-o = s:option(Value, "ss_tcp_header_response_reason", "%s - %s" % { translate("TCP"), translate("Header Response Reason") })
+o = s:option(Value, "ss_tcp_header_response_reason", "%s - %s" % { "TCP", translate("Response Reason") })
 o:depends("ss_tcp_header_type", "http")
 
-o = s:option(DynamicList, "ss_tcp_header_response_headers", "%s - %s" % { translate("TCP"), translate("Header Response Headers") },
+o = s:option(DynamicList, "ss_tcp_header_response_headers", "%s - %s" % { "TCP", translate("Response Headers") },
 	translate("example: Host: example.com"))
 o:depends("ss_tcp_header_type", "http")
 
 -- StreamSettings - KCP
-o = s:option(Value, "ss_kcp_mtu", "%s - %s" % { translate("KCP"), translate("MTU") })
+o = s:option(Value, "ss_kcp_mtu", "%s - %s" % { "KCP", translate("MTU") })
 o:depends("ss_network", "kcp")
 o.datatype = "and(uinteger, min(576), max(1460))"
 
-o = s:option(Value, "ss_kcp_tti", "%s - %s" % { translate("KCP"), translate("TTI") })
+o = s:option(Value, "ss_kcp_tti", "%s - %s" % { "KCP", translate("TTI") })
 o:depends("ss_network", "kcp")
 o.datatype = "and(uinteger, min(10), max(100))"
 
-o = s:option(Value, "ss_kcp_uplinkcapacity", "%s - %s" % { translate("KCP"), translate("UplinkCapacity") })
+o = s:option(Value, "ss_kcp_uplinkcapacity", "%s - %s" % { "KCP", translate("Uplink Capacity") })
 o:depends("ss_network", "kcp")
 o.datatype = "uinteger"
 
-o = s:option(Value, "ss_kcp_downlinkcapacity", "%s - %s" % { translate("KCP"), translate("DownlinkCapacity") })
+o = s:option(Value, "ss_kcp_downlinkcapacity", "%s - %s" % { "KCP", translate("Downlink Capacity") })
 o:depends("ss_network", "kcp")
 o.datatype = "uinteger"
 
-o = s:option(Flag, "ss_kcp_congestion", "%s - %s" % { translate("KCP"), translate("Congestion") })
+o = s:option(Flag, "ss_kcp_congestion", "%s - %s" % { "KCP", translate("Congestion Enabled") })
 o:depends("ss_network", "kcp")
 
-o = s:option(Value, "ss_kcp_readbuffersize", "%s - %s" % { translate("KCP"), translate("ReadBufferSize") })
-o:depends("ss_network", "kcp")
-o.datatype = "uinteger"
-
-o = s:option(Value, "ss_kcp_writebuffersize", "%s - %s" % { translate("KCP"), translate("WriteBufferSize") })
+o = s:option(Value, "ss_kcp_readbuffersize", "%s - %s" % { "KCP", translate("Read Buffer Size") })
 o:depends("ss_network", "kcp")
 o.datatype = "uinteger"
 
-o = s:option(ListValue, "ss_kcp_header_type", "%s - %s" % { translate("KCP"), translate("Header Type") })
+o = s:option(Value, "ss_kcp_writebuffersize", "%s - %s" % { "KCP", translate("Write Buffer Size") })
+o:depends("ss_network", "kcp")
+o.datatype = "uinteger"
+
+o = s:option(ListValue, "ss_kcp_header_type", "%s - %s" % { "KCP", translate("Header Type") })
 o:depends("ss_network", "kcp")
 o:value("")
 o:value("none", translate("None"))
@@ -398,48 +398,48 @@ o:value("wechat-video")
 o:value("dtls")
 o:value("wireguard")
 
-o = s:option(Value, "ss_kcp_seed", "%s - %s" % { translate("KCP"), translate("Seed") })
+o = s:option(Value, "ss_kcp_seed", "%s - %s" % { "KCP", translate("Seed") })
 o:depends("ss_network", "kcp")
 
 -- StreamSettings - WebSocket
-o = s:option(Value, "ss_ws_path", "%s - %s" % { translate("WebSocket"), translate("Path") })
+o = s:option(Value, "ss_ws_path", "%s - %s" % { "WebSocket", translate("Path") })
 o:depends("ss_network", "ws")
 
-o = s:option(DynamicList, "ss_ws_headers", "%s - %s" % { translate("WebSocket"), translate("Headers") },
+o = s:option(DynamicList, "ss_ws_headers", "%s - %s" % { "WebSocket", translate("Headers") },
 	translate("example: Host: example.com"))
 o:depends("ss_network", "ws")
 
 -- StreamSettings - HTTP/2
-o = s:option(DynamicList, "ss_http_host", "%s - %s" % { translate("HTTP/2"), translate("Host") },
+o = s:option(DynamicList, "ss_http_host", "%s - %s" % { "HTTP/2", translate("Host") },
 	translate("example: example.com"))
 o:depends("ss_network", "http")
 
-o = s:option(Value, "ss_http_path", "%s - %s" % { translate("HTTP/2"), translate("Path") })
+o = s:option(Value, "ss_http_path", "%s - %s" % { "HTTP/2", translate("Path") })
 o:depends("ss_network", "http")
 
-o = s:option(Value, "ss_http_readidletimeout", "%s - %s" % { translate("HTTP/2"), translate("ReadIdleTimeout") })
+o = s:option(Value, "ss_http_readidletimeout", "%s - %s" % { "HTTP/2", translate("Read Idle Timeout") })
 o:depends("ss_network", "http")
 o.datatype = "uinteger"
 
-o = s:option(Value, "ss_http_healthchecktimeout", "%s - %s" % { translate("HTTP/2"), translate("HealthCheckTimeout") })
+o = s:option(Value, "ss_http_healthchecktimeout", "%s - %s" % { "HTTP/2", translate("Health Check Timeout") })
 o:depends("ss_network", "http")
 o.datatype = "uinteger"
 
 -- StreamSettings - DomainSocket
 
 -- StreamSettings - QUIC
-o = s:option(ListValue, "ss_quic_security", "%s - %s" % { translate("QUIC"), translate("Security") })
+o = s:option(ListValue, "ss_quic_security", "%s - %s" % { "QUIC", translate("Security") })
 o:depends("ss_network", "quic")
 o:value("")
 o:value("none", translate("None"))
 o:value("aes-128-gcm")
 o:value("chacha20-poly1305")
 
-o = s:option(Value, "ss_quic_key", "%s - %s" % { translate("QUIC"), translate("Key") },
+o = s:option(Value, "ss_quic_key", "%s - %s" % { "QUIC", translate("Key") },
 	translate("just security isn't none"))
 o:depends("ss_network", "quic")
 
-o = s:option(ListValue, "ss_quic_header_type", "%s - %s" % { translate("QUIC"), translate("Header Type") })
+o = s:option(ListValue, "ss_quic_header_type", "%s - %s" % { "QUIC", translate("Header Type") })
 o:depends("ss_network", "quic")
 o:value("none", translate("None"))
 o:value("srtp")
@@ -449,42 +449,42 @@ o:value("dtls")
 o:value("wireguard")
 
 -- StreamSettins - GRPC
-o = s:option(Value, "ss_grpc_servicename", "%s - %s" % { translate("GRPC"), translate("ServiceName") })
+o = s:option(Value, "ss_grpc_servicename", "%s - %s" % { "GRPC", translate("Service Name") })
 o:depends("ss_network", "grpc")
 
-o = s:option(Flag, "ss_grpc_multimode", "%s - %s" % { translate("GRPC"), translate("MultiMode") })
+o = s:option(Flag, "ss_grpc_multimode", "%s - %s" % { "GRPC", translate("Multi Mode") })
 o:depends("ss_network", "grpc")
 
-o = s:option(Value, "ss_grpc_idletimeout", "%s - %s" % { translate("GRPC"), translate("IdleTimeout") })
+o = s:option(Value, "ss_grpc_idletimeout", "%s - %s" % { "GRPC", translate("Idle Timeout") })
 o:depends("ss_network", "grpc")
 
-o = s:option(Value, "ss_grpc_healthchecktimeout", "%s - %s" % { translate("GRPC"), translate("HealthCheckTimeout") })
+o = s:option(Value, "ss_grpc_healthchecktimeout", "%s - %s" % { "GRPC", translate("Health Check Timeout") })
 o:depends("ss_network", "grpc")
 
-o = s:option(Value, "ss_grpc_permitwithoutstream", "%s - %s" % { translate("GRPC"), translate("PermitWithoutStream") })
+o = s:option(Value, "ss_grpc_permitwithoutstream", "%s - %s" % { "GRPC", translate("Permit Without Stream") })
 o:depends("ss_network", "grpc")
 
 -- StreamSettings - Sockopt
-o = s:option(Value, "ss_sockopt_mark", "%s - %s" % { translate("Sockopt"), translate("Mark") },
+o = s:option(Value, "ss_sockopt_mark", "%s - %s" % { "Sockopt", translate("Mark") },
 	translate("Mark Output"))
 o.datatype = "and(uinteger, min(0), max(255))"
 
-o = s:option(Value, "ss_sockopt_tcpfastopen", "%s - %s" % { translate("Sockopt"), translate("TCPFastOpen") })
+o = s:option(Value, "ss_sockopt_tcpfastopen", "%s - %s" % { "Sockopt", translate("TCP Fast Open") })
 o.datatype = "or(bool, integer)"
 
-o = s:option(ListValue, "ss_sockopt_tproxy", "%s - %s" % { translate("Sockopt"), translate("TProxy") })
+o = s:option(ListValue, "ss_sockopt_tproxy", "%s - %s" % { "Sockopt", translate("TProxy") })
 o:value("")
 o:value("off")
 o:value("redirect")
 o:value("tproxy")
 
-o = s:option(ListValue, "ss_sockopt_domainstrategy", "%s - %s" % { translate("Sockopt"), translate("DomainStrategy") })
+o = s:option(ListValue, "ss_sockopt_domainstrategy", "%s - %s" % { "Sockopt", translate("Domain Strategy") })
 o:value("")
 o:value("AsIs")
 o:value("UseIP")
 o:value("UseIPv4")
 o:value("UseIPv6")
 
-o = s:option(Value, "ss_sockopt_dialerproxy", "%s - %s" % { translate("Sockopt"), translate("DialerProxy") })
+o = s:option(Value, "ss_sockopt_dialerproxy", "%s - %s" % { "Sockopt", translate("Dialer Proxy") })
 
 return m
