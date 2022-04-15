@@ -12,9 +12,25 @@ PKG_CONFIG_DEPENDS:= \
 LUCI_TITLE:=LuCI support for ByPass2Ray
 LUCI_PKGARCH:=all
 LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
-	+ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc +resolveip \
-	+dnsmasq-full +ipset +iptables +iptables-mod-iprange +kmod-ipt-nat \
-	+sudo +tcping
+	+ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc +resolveip +sudo +tcping
+
+define Package/$(PKG_NAME)/config
+menu "Configuration"
+
+config PACKAGE_$(PKG_NAME)_Transparent_Proxy
+	bool "Transparent Proxy"
+	select PACKAGE_dnsmasq-full
+	select PACKAGE_ipset
+	select PACKAGE_iptables
+	select PACKAGE_iptables-legacy
+	select PACKAGE_iptables-mod-iprange
+	select PACKAGE_iptables-mod-socket
+	select PACKAGE_iptables-mod-tproxy
+	select PACKAGE_kmod-ipt-nat
+	default y
+
+endmenu
+endef
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/bypass2ray
