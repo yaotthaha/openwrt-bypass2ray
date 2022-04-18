@@ -142,3 +142,44 @@ function urlDecode(s)
    s = string.gsub(s, '%%(%x%x)', function(h) return string.char(tonumber(h, 16)) end)
    return s
 end
+
+function Diff(tableA, tableB)
+    if type(tableA) ~= "table" or type(tableB) ~= "table" then
+        return nil, nil
+    end
+    if table.getn(tableA) <= 0 and table.getn(tableB) <= 0 then
+        return {}, {}
+    end
+    if table.getn(tableA) <= 0 and table.getn(tableB) > 0 then
+        return {}, tableB
+    end
+    if table.getn(tableB) <= 0 and table.getn(tableA) > 0 then
+        return tableA, {}
+    end
+    local temp = {}
+    for _, v in pairs(tableA) do
+        if temp[v] == nil then
+            temp[v] = 1
+        end
+    end
+    for _, v in pairs(tableB) do
+        if temp[v] == nil then
+            temp[v] = -1
+        else
+            temp[v] = 0
+        end
+    end
+    local Add = {}
+    local Del = {}
+    for k, v in pairs(temp) do
+        if v ~= 0 then
+            if v == -1 then
+                table.insert(Add, k)
+            end
+            if v == 1 then
+                table.insert(Del, k)
+            end
+        end
+    end
+    return Add, Del
+end

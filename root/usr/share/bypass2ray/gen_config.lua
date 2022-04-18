@@ -385,7 +385,7 @@ for _, v in ipairs(InboundCfg) do
                     request["path"] = v["ss_tcp_header_request_path"]
                 end
                 if v["ss_tcp_header_request_headers"] then
-                    request["headers"] = ListToMap(v["ss_tcp_header_request_headers"], ": ", true)
+                    request["headers"] = ListToMap(v["ss_tcp_header_request_headers"], ":", true)
                 end
                 if next(request) ~= nil then
                     settings["header"]["request"] = request
@@ -401,7 +401,7 @@ for _, v in ipairs(InboundCfg) do
                     response["reason"] = v["ss_tcp_header_response_reason"]
                 end
                 if v["ss_tcp_header_response_headers"] then
-                    response["headers"] = ListToMap(v["ss_tcp_header_response_headers"], ": ", true)
+                    response["headers"] = ListToMap(v["ss_tcp_header_response_headers"], ":", true)
                 end
                 if next(response) ~= nil then
                     settings["header"]["response"] = response
@@ -452,7 +452,7 @@ for _, v in ipairs(InboundCfg) do
                 settings["path"] = v["ss_ws_path"]
             end
             if v["ss_ws_headers"] then
-                settings["headers"] = ListToMap(v["ss_ws_headers"], ": ")
+                settings["headers"] = ListToMap(v["ss_ws_headers"], ":")
             end
             if next(settings) ~= nil then
                 streamSettings["wsSettings"] = settings
@@ -857,7 +857,7 @@ for _, v in ipairs(OutboundCfg) do
                     request["path"] = v["ss_tcp_header_request_path"]
                 end
                 if v["ss_tcp_header_request_headers"] then
-                    request["headers"] = ListToMap(v["ss_tcp_header_request_headers"], ": ", true)
+                    request["headers"] = ListToMap(v["ss_tcp_header_request_headers"], ":", true)
                 end
                 if next(request) ~= nil then
                     settings["header"]["request"] = request
@@ -873,7 +873,7 @@ for _, v in ipairs(OutboundCfg) do
                     response["reason"] = v["ss_tcp_header_response_reason"]
                 end
                 if v["ss_tcp_header_response_headers"] then
-                    response["headers"] = ListToMap(v["ss_tcp_header_response_headers"], ": ", true)
+                    response["headers"] = ListToMap(v["ss_tcp_header_response_headers"], ":", true)
                 end
                 if next(response) ~= nil then
                     settings["header"]["response"] = response
@@ -921,7 +921,7 @@ for _, v in ipairs(OutboundCfg) do
                 settings["path"] = v["ss_ws_path"]
             end
             if v["ss_ws_headers"] then
-                settings["headers"] = ListToMap(v["ss_ws_headers"], ": ")
+                settings["headers"] = ListToMap(v["ss_ws_headers"], ":")
             end
             if next(settings) ~= nil then
                 streamSettings["wsSettings"] = settings

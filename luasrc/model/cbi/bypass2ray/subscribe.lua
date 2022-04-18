@@ -25,10 +25,23 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "?"
 end
 
-o = s:option(Button, "_update", translate("Update"))
+o = s:option(Button, "_update_all", translate("Update All"))
 o.inputstyle = "save"
 function o.write(t, n)
     sys.call("lua /usr/share/bypass2ray/subscribe_update.lua " .. n .. " >/dev/null 2>&1 &")
+    sys.call("lua /usr/share/bypass2ray/subscribe_add_from_list.lua " .. n .. " >/dev/null 2>&1 &")
+end
+
+o = s:option(Button, "_update_peerlist", translate("Update PeerList"))
+o.inputstyle = "save"
+function o.write(t, n)
+    sys.call("lua /usr/share/bypass2ray/subscribe_update.lua " .. n .. " >/dev/null 2>&1 &")
+end
+
+o = s:option(Button, "_update_from_peerlist", translate("Update From PeerList"))
+o.inputstyle = "save"
+function o.write(t, n)
+    sys.call("lua /usr/share/bypass2ray/subscribe_add_from_list.lua " .. n .. " >/dev/null 2>&1 &")
 end
 
 o = s:option(Button, "_delete_all", translate("Delete All Peers(Outbounds)"))
@@ -42,7 +55,7 @@ function o.write(t, n)
     uci:commit(appname)
 end
 
-o = s:option(Button, "_delete_list", translate("Delete Peer List"))
+o = s:option(Button, "_delete_list", translate("Delete PeerList"))
 o.inputstyle = "reset"
 function o.write(t, n)
     uci:delete(appname, n, "peerlist")

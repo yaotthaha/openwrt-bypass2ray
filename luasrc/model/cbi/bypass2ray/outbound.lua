@@ -8,6 +8,8 @@ local m, s, o
 
 m = Map(appname, "%s - %s" % { translate("ByPass2Ray"), translate("Outbound") })
 
+m:append(Template(appname .. "/outbound_tool"))
+
 s = m:section(TypedSection, "outbound")
 s.anonymous = true
 s.addremove = true

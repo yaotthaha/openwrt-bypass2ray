@@ -29,7 +29,9 @@ local support = require "luci.model.cbi.bypass2ray.support"
 		    end
 	    -%>
     </ul>
-    <input id="clear_log" class="btn cbi-button cbi-button-reset" type="button" onclick="clearlogfunc()" value='<%:Clear Log%>'/>
+    <br/>
+    <input id="clear_log" class="btn cbi-button cbi-button-reset" type="button" onclick="clearlogfunc()" value='Clear Log'/>
+    <input id="flush_log" class="btn cbi-button cbi-button-reset" type="button" onclick="flushlogfunc()" value='Flush Log'/>
     <textarea id="log_textarea" class="cbi-input-textarea" style="width: 100%;margin-top: 10px;" data-update="change" rows="40" wrap="off" readonly="readonly"></textarea>
 </div>
 
@@ -37,9 +39,21 @@ local support = require "luci.model.cbi.bypass2ray.support"
     var doc = document.querySelector('div#logmenu');
     var now_li_id = doc.querySelector('#li_bypass2ray_log').getAttribute('id'); // li_bypass2ray_log
     var logall = ["bypass2ray_log"]
+    var StopTag = false;
     //
     var textarea = "";
-    function GetLog(name) { // name => li_bypass2ray_log
+    function flush_textarea() {
+        var t = document.getElementById('log_textarea');
+        t.innerHTML = textarea;
+        t.scrollTop = t.scrollHeight;
+        return true;
+    }
+    function ClearLog(name) {
+        XHR.get('<%=support.url("clear_")%>' + name.replace('li_', ''), null, null);
+        textarea = "";
+    }
+    
+    function GetLog(name, func) { // name => li_bypass2ray_log
         if (now_li_id != name) {
             return
         }
@@ -47,34 +61,22 @@ local support = require "luci.model.cbi.bypass2ray.support"
 			function(x, data) {
 				if(x && x.status == 200) {
 					textarea = x.responseText;
+                    if (typeof(func()) == "function") {
+                        func();
+                    }
 				}
 			}
 		);
     }
-    function ClearLog(name) {
-        XHR.get('<%=support.url("clear_")%>' + name.replace('li_', ''), null, null);
-        textarea = "";
-    }
-    function flush_textarea() {
-        var t = document.getElementById('log_textarea');
-        t.innerHTML = textarea;
-        t.scrollTop = t.scrollHeight;
-    }
-    self.setInterval("flush_textarea()", 100);
-    GetLog(now_li_id);
-    flush_textarea();
-    self.setInterval("GetLog('li_bypass2ray_log')", 4000);
+    GetLog(now_li_id, flush_textarea);
     if (doc.querySelector('#li_all_log') != null) {
         logall.push("all_log");
-        self.setInterval("GetLog('li_all_log')", 4000);
     }
     if (doc.querySelector('#li_access_log') != null) {
         logall.push("access_log");
-        self.setInterval("GetLog('li_access_log')", 4000);
     }
     if (doc.querySelector('#li_error_log') != null) {
         logall.push("error_log");
-        self.setInterval("GetLog('li_error_log')", 4000);
     }
     function change_log(li_id) {
         if (li_id == now_li_id) {
@@ -87,11 +89,14 @@ local support = require "luci.model.cbi.bypass2ray.support"
         textarea = "";
         flush_textarea();
         now_li_id = li_id;
-        GetLog(now_li_id);
-        flush_textarea();
+        GetLog(now_li_id, flush_textarea);
     }
     function clearlogfunc() {
         ClearLog(now_li_id);
+        flush_textarea();
+    }
+    function flushlogfunc() {
+        GetLog(now_li_id, flush_textarea);
     }
 </script>
 </html>

@@ -3,44 +3,92 @@ local dsp = require "luci.dispatcher"
 -%>
 
 <script type="text/javascript">
-    var peerinfo = document.querySelectorAll('.tr');
-    var group = new Array();
-    peerinfo.forEach(function(item, index) {
-        if (index == 0) {
+    var peerinfo = document.querySelector('tbody');
+    peerinfo.querySelectorAll('tr').forEach(function (item, index) {
+        if (item.getAttribute('id') == null) {
             return
         }
         var id = item.getAttribute('id').split('-')[2]; // Get ID
         var n = 0
-        item.querySelectorAll('.td').forEach(function(m, i) {
-            if (m.getAttribute('data-name') == "_delay") {
+        item.querySelectorAll('td.cbi-value-field').forEach(function (m, i) {
+            if (m.querySelector('div#cbi-bypass2ray-' + id + '-_delay') != null) {
                 n = i;
             }
         })
-        var delayTag = item.querySelectorAll('.td')[n]; // Delay
-        var delayHTML = delayTag.querySelector("div[data-index]").innerHTML;
+        var delayTag = item.querySelectorAll('td.cbi-value-field')[n]; // Delay
+        var delayDIVHTML = delayTag.querySelector('div').innerHTML;
+        delayTag.querySelector('div').innerHTML =
+            '<input id="start_delay" class="btn cbi-button cbi-button-apply" type="button" onclick="startDelayOnefunc(\'' +
+            id + '\')" value="Start Delay">' + delayDIVHTML;
+        delayTag.querySelector('div').querySelector('input').style.color = "#5187f3";
+    });
+    function startDelayOnefunc(id) {
+        var peer = document.querySelector('tbody').querySelector('tr#cbi-bypass2ray-' + id);
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 var data = xhr.response;
                 if (data == null || data == "") {
                     return
                 }
-                var h = "-"
-                var hS1 = '<font size="2" color="'
-                var hS2 = '">'
-                var hE = '</font>'
+                let RedColor = "#B45945";
+                let YellowColor = "#37E145";
+                let GreenColor = "#22C12F";
+                peer.querySelector('#start_delay').setAttribute("class", "cbi-button cbi-button-save");
                 if (isNaN(parseInt(data))) {
-                    h = hS1 + "#B45945" + hS2 + data + hE // Red
+                    peer.querySelector('#start_delay').style.color = RedColor;
                 } else if (parseInt(data) > 100) {
-                    h = hS1 + "#37E145" + hS2 + data + hE // Yellow
+                    peer.querySelector('#start_delay').style.color = YellowColor;
                 } else {
-                    h = hS1 + "#22C12F" + hS2 + data + hE
+                    peer.querySelector('#start_delay').style.color = GreenColor;
                 }
-                console.log(h);
-                delayTag.querySelector("div[data-index]").innerHTML = h + delayHTML;
+                peer.querySelector('#start_delay').value = data;
             }
         }
-        xhr.open('GET', '<%=dsp.build_url("admin/services/bypass2ray/get_outbound_delay")%>' + "?sid=" + id, true);
+        xhr.open('GET', '<%=dsp.build_url("admin/services/bypass2ray/get_outbound_delay")%>' + "?sid=" + id,
+            true);
         xhr.send('');
-    });
+    }
+    function testDelay() {
+        var group = new Array();
+        peerinfo.querySelectorAll('tr').forEach(function (item, index) {
+            if (item.getAttribute('id') == null) {
+                return
+            }
+            var id = item.getAttribute('id').split('-')[2]; // Get ID
+            var n = 0
+            item.querySelectorAll('td.cbi-value-field').forEach(function (m, i) {
+                if (m.querySelector('div#cbi-bypass2ray-' + id + '-_delay') != null) {
+                    n = i;
+                }
+            })
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    var data = xhr.response;
+                    if (data == null || data == "") {
+                        return
+                    }
+                    let RedColor = "#B45945";
+                    let YellowColor = "#37E145";
+                    let GreenColor = "#22C12F";
+                    item.querySelector('#start_delay').setAttribute("class", "cbi-button cbi-button-save");
+                    if (isNaN(parseInt(data))) {
+                        item.querySelector('#start_delay').style.color = RedColor;
+                    } else if (parseInt(data) > 100) {
+                        item.querySelector('#start_delay').style.color = YellowColor;
+                    } else {
+                        item.querySelector('#start_delay').style.color = GreenColor;
+                    }
+                    item.querySelector('#start_delay').value = data;
+                }
+            }
+            xhr.open('GET', '<%=dsp.build_url("admin/services/bypass2ray/get_outbound_delay")%>' + "?sid=" + id,
+                true);
+            xhr.send('');
+        });
+    }
+    function startDelayfunc() {
+        testDelay();
+    }
 </script>
