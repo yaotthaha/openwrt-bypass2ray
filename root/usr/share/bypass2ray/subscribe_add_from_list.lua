@@ -91,6 +91,12 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
         if t["host"] ~= nil  and t["host"] ~= "" then
             cfg_host = support.split(t["host"], ",")
         end
+        if t["tls"] ~= nil and t["tls"] ~= "" then
+            cfg_tls = "tls"
+            if t["sni"] ~= nil and t["sni"] ~= "" then
+                cfg_sni = t["sni"]
+            end
+        end
     elseif t["net"] == "kcp" then
         cfg_network = "kcp"
         if t["type"] == "none" then
@@ -105,6 +111,12 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
         if t["path"] ~= nil and t["path"] ~= "" then
             cfg_seed_kcp = t["path"]
         end
+        if t["tls"] ~= nil and t["tls"] ~= "" then
+            cfg_tls = "tls"
+            if t["sni"] ~= nil and t["sni"] ~= "" then
+                cfg_sni = t["sni"]
+            end
+        end
     elseif t["net"] == "ws" then
         cfg_network = "ws"
         if t["host"] ~= nil and t["host"] ~= "" then
@@ -113,6 +125,14 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
         if t["path"] ~= nil and t["path"] ~= "" then
             cfg_path = t["path"]
         end
+        if t["tls"] ~= nil and t["tls"] ~= "" then
+            cfg_tls = "tls"
+            if t["sni"] ~= nil and t["sni"] ~= "" then
+                cfg_sni = t["sni"]
+            elseif t["host"] ~= nil and t["host"] ~= "" then
+                cfg_sni = t["host"]
+            end
+        end
     elseif t["net"] == "h2" then
         cfg_network = "http"
         if t["host"] ~= nil and t["host"] ~= "" then
@@ -120,6 +140,14 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
         end
         if t["path"] ~= nil and t["path"] ~= "" then
             cfg_path = t["path"]
+        end
+        if t["tls"] ~= nil and t["tls"] ~= "" then
+            cfg_tls = "tls"
+            if t["sni"] ~= nil and t["sni"] ~= "" then
+                cfg_sni = t["sni"]
+            elseif t["host"] ~= nil and t["host"] ~= "" then
+                cfg_sni = t["host"]
+            end
         end
     elseif t["net"] == "quic" then
         cfg_network = "quic"
@@ -138,25 +166,18 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
         if t["path"] ~= nil and t["path"] ~= "" then
             cfg_key_quic = t["path"]
         end
+        if t["tls"] ~= nil and t["tls"] ~= "" then
+            cfg_tls = "tls"
+            if t["sni"] ~= nil and t["sni"] ~= "" then
+                cfg_sni = t["sni"]
+            end
+        end
     else
         return -1
     end
-    if t["tls"] ~= nil and t["tls"] ~= "" then
-        cfg_tls = "tls"
-    end
-    if t["sni"] ~= nil and t["sni"] ~= "" then
-        cfg_sni = t["sni"]
-    end
     local uuid = support.gen_uuid()
     uci:set(appname, uuid, "outbound")
-    if enable then
-        uci:set(appname, uuid, "enable", "1")
-    else
-        uci:set(appname, uuid, "enable", "0")
-    end
-    if type(mark) == "number" and mark ~= 0 then
-        uci:set(appname, uuid, "ss_sockopt_mark", mark)
-    end
+    uci:set(appname, uuid, "enable", "0")
     uci:set(appname, uuid, "alias", cfg_alias)
     --
     uci:set(appname, uuid, "subscribe_tag", subsid)
@@ -173,10 +194,10 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
         uci:set(appname, uuid, "ss_tcp_header_type", cfg_type)
         if cfg_host ~= nil and type(cfg_host) == "table" then
             local hostLst = {}
-            for _, v in ipairs(cfg_host) do
-                table.insert(hostLst, "Host:" .. v)
-            end
-            if #hostLst > 0 then
+                for _, v in ipairs(cfg_host) do
+                    table.insert(hostLst, "Host:" .. v)
+                end
+                if #hostLst > 0 then
                 uci:set_list(appname, uuid, "ss_tcp_header_response_headers", hostLst)
             end
         end
@@ -218,6 +239,7 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
             uci:set(appname, uuid, "ss_tls_servername", cfg_sni)
         end
     end
+    --uci:set(appname, uuid, "ss_sockopt_mark", "255")
     if commit then
         uci:commit(appname)
     end

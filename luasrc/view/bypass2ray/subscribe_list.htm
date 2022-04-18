@@ -88,6 +88,9 @@ local dsp = require "luci.dispatcher"
 	<legend>
 		<%:Subscribe Peers%>
 	</legend>
+    <br/>
+    <input id="start_delay" class="btn cbi-button cbi-button-save" type="button" onclick="test_delay()" value='Start Delay'/>
+    <br/>
 	<div id="peers">
         <div class="pure-u-1-4 check">
 			<div class="block pure-g">
@@ -104,6 +107,7 @@ local dsp = require "luci.dispatcher"
     var sid = urlSlice[urlSlice.length-1];
     var urlGet = '<%=dsp.build_url("admin/services/bypass2ray/get_subscribe_peer")%>?sid=' + sid
     var xhr = new XMLHttpRequest();
+    var peer_data;
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             var data = JSON.parse(xhr.response);
@@ -126,10 +130,10 @@ local dsp = require "luci.dispatcher"
                 }
                 Write += '<div class="pure-u-1-4 check" id="' + item.id + '"><div class="block pure-g" onclick="jumpToPeer(\'' + item.id + '\')"><div class="pure-u-2-3"><h4>'
                 Write += protocol + '<br/><span class="' + colorShow + '">'
-                Write += item.alias + '</span></h4><h4 id="delay">...</h4></div></div></div></div>';
+                Write += item.alias + '</span></h4><h4 id="delay">......</h4></div></div></div></div>';
             });
             document.getElementById("peers").innerHTML = Write;
-            test_delay(data);
+            peer_data = data;
         }
     }
     xhr.open('GET', urlGet, true);
@@ -137,8 +141,8 @@ local dsp = require "luci.dispatcher"
     function jumpToPeer(id) {
         window.location.href = '<%=dsp.build_url("admin/services/bypass2ray/outbound")%>' + '/' + id
     }
-    function test_delay(data) {
-        data.forEach(function(item, index) {
+    function test_delay() {
+        peer_data.forEach(function(item, index) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
