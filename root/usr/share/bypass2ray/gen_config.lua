@@ -1030,10 +1030,14 @@ for _, v in ipairs(RoutingRuleCfg) do
             s["type"] = v["type"]
         end
         if v["domain"] then
-            s["domain"] = v["domain"]
+            if next(v["domain"]) ~= nil then
+                s["domain"] = v["domain"]
+            end
         end
         if v["ip"] then
-            s["ip"] = v["ip"]
+            if next(v["ip"]) ~= nil then
+                s["ip"] = v["ip"]
+            end
         end
         if v["port"] then
             s["port"] = table.concat(v["port"], ",")

@@ -5,14 +5,14 @@ PID="/var/run/${NAME}.pid"
 LOGFILE="/tmp/${NAME}.log"
 
 config_n_get() {
-	local ret=$(uci -q get "${NAME}.${1}.${2}" 2>/dev/null)
-	echo "${ret:=$3}"
+    local ret=$(uci -q get "${NAME}.${1}.${2}" 2>/dev/null)
+    echo "${ret:=$3}"
 }
 
 config_t_get() {
-	local index=${4:-0}
-	local ret=$(uci -q get "${NAME}.@${1}[${index}].${2}" 2>/dev/null)
-	echo "${ret:=${3}}"
+    local index=${4:-0}
+    local ret=$(uci -q get "${NAME}.@${1}[${index}].${2}" 2>/dev/null)
+    echo "${ret:=${3}}"
 }
 
 log() {
@@ -20,12 +20,12 @@ log() {
         touch $LOGFILE
         chmod 0777 $LOGFILE
     fi
-	echo `date +"[%Y-%m-%d %H:%M:%S]"` $* >> $LOGFILE
+    echo $(date +"[%Y-%m-%d %H:%M:%S]") $* >>$LOGFILE
 }
 
 logcheck() {
     if [ -f "$LOGFILE" ]; then
-        if [ `cat $LOGFILE | wc -l` -gt 100 ]; then
+        if [ $(cat $LOGFILE | wc -l) -gt 100 ]; then
             rm -f $LOGFILE
             touch $LOGFILE
             chmod 0777 $LOGFILE
@@ -56,9 +56,11 @@ start() {
     fi
     log "配置文件: $CONFIG"
     BINARYFILE=$(config_n_get global binary_file "/usr/bin/xray")
-    RUNFILE="$TMPDIR/ray"
+    RUNFILE="/usr/share/bypass2ray/ray"
     if [ -f "$BINARYFILE" ]; then
-        ln -s $BINARYFILE $RUNFILE
+        if [ ! -f "$RUNFILE"]; then
+            cp $BINARYFILE $RUNFILE
+        fi
     else
         echo "binary_file not found"
         log "二进制文件未找到"
@@ -78,10 +80,10 @@ start() {
         export V2RAY_LOCATION_ASSET=$(config_n_get global resource_location "/usr/share/bypass2ray/")
         export XRAY_LOCATION_ASSET=$V2RAY_LOCATION_ASSET
         log "启动程序"
-        $RUNFILE run -config $CONFIG >$TMPDIR/all.log 2>&1 &
-        id=`echo $!`
+        nohup $RUNFILE run -config $CONFIG >$TMPDIR/all.log 2>&1 &
+        id=$(echo $!)
         log "PID: $id"
-        echo $id > $PID
+        echo $id >$PID
         lua /usr/share/bypass2ray/run_scripts.lua astart | while read l; do [ -z "$l" ] || echo $l && log $l; done
     fi
 }
@@ -98,8 +100,8 @@ stop() {
             log "临时文件夹路径未找到"
             exit 1
         fi
-	    lua /usr/share/bypass2ray/run_scripts.lua bstop | while read l; do [ -z "$l" ] || echo $l && log $l; done
-        kill $(cat $PID) > /dev/null 2>&1
+        lua /usr/share/bypass2ray/run_scripts.lua bstop | while read l; do [ -z "$l" ] || echo $l && log $l; done
+        kill $(cat $PID) >/dev/null 2>&1
         rm -f $PID
         log "结束进程: $(cat $PID)"
         rm -rf $TMPDIR/*
@@ -110,9 +112,9 @@ stop() {
 
 case $1 in
 start)
-start
-;;
+    start
+    ;;
 stop)
-stop
-;;
+    stop
+    ;;
 esac

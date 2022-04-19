@@ -53,8 +53,8 @@ o.default = "/usr/bin/xray"
 
 o = s:option(Value, "resource_location", translate("Resource Location"))
 o.datatype = "directory"
-o.placeholder = "/usr/share/bypass2ray"
-o.default = "/usr/share/bypass2ray"
+o.placeholder = "/usr/share/bypass2ray/"
+o.default = "/usr/share/bypass2ray/"
 
 o = s:option(Value, "tmp_dir", translate("Temp Dir"))
 o.placeholder = "/tmp/bypass2ray"
