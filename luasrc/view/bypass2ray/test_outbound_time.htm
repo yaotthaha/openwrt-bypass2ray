@@ -19,7 +19,7 @@ local dsp = require "luci.dispatcher"
         var delayDIVHTML = delayTag.querySelector('div').innerHTML;
         delayTag.querySelector('div').innerHTML =
             '<input id="start_delay" class="btn cbi-button cbi-button-apply" type="button" onclick="startDelayOnefunc(\'' +
-            id + '\')" value="Start Delay">' + delayDIVHTML;
+            id + '\')" value="<%:Start Delay%>">' + delayDIVHTML;
         delayTag.querySelector('div').querySelector('input').style.color = "#5187f3";
     });
     function startDelayOnefunc(id) {

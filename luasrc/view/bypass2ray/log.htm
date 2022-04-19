@@ -7,31 +7,31 @@ local support = require "luci.model.cbi.bypass2ray.support"
     <ul class="tabs">
         <li class="tabmenu-item-bypass2ray_log active" id="li_bypass2ray_log">
             <a id="bypass2ray_log" onclick="change_log('li_bypass2ray_log')" style="cursor: pointer;">
-                Main Log
+                <%:Main Log%>
             </a>
         </li>
         <%
 		    local all_log_filename = support.get_all_log_filename()
 		    if all_log_filename ~= nil then
-    			print('<li class="tabmenu-item-all_log " id="li_all_log"><a id="all_log" onclick="change_log(\'li_all_log\')" style="cursor: pointer;">All Log</a></li>')
+    			print('<li class="tabmenu-item-all_log " id="li_all_log"><a id="all_log" onclick="change_log(\'li_all_log\')" style="cursor: pointer;">' .. translate("All Log") .. '</a></li>')
 		    end
 	    -%>
         <%
 		    local access_log_filename = support.get_access_log_filename()
 		    if access_log_filename ~= nil then
-    			print('<li class="tabmenu-item-access_log " id="li_access_log"><a id="access_log" onclick="change_log(\'li_access_log\')" style="cursor: pointer;">Acccess Log</a></li>')
+    			print('<li class="tabmenu-item-access_log " id="li_access_log"><a id="access_log" onclick="change_log(\'li_access_log\')" style="cursor: pointer;">' .. translate("Access Log") .. '</a></li>')
 		    end
 	    -%>
 	    <%
     		local error_log_filename = support.get_error_log_filename()
 		    if error_log_filename ~= nil then
-    			print('<li class="tabmenu-item-error_log " id="li_error_log"><a id="error_log" onclick="change_log(\'li_error_log\')" style="cursor: pointer;">Error Log</a></li>')
+    			print('<li class="tabmenu-item-error_log " id="li_error_log"><a id="error_log" onclick="change_log(\'li_error_log\')" style="cursor: pointer;">' .. translate("Error Log") .. '</a></li>')
 		    end
 	    -%>
     </ul>
     <br/>
-    <input id="clear_log" class="btn cbi-button cbi-button-reset" type="button" onclick="clearlogfunc()" value='Clear Log'/>
-    <input id="flush_log" class="btn cbi-button cbi-button-reset" type="button" onclick="flushlogfunc()" value='Flush Log'/>
+    <input id="clear_log" class="btn cbi-button cbi-button-reset" type="button" onclick="clearlogfunc()" value='<%:Clear Log%>'/>
+    <input id="flush_log" class="btn cbi-button cbi-button-reset" type="button" onclick="flushlogfunc()" value='<%:Flush Log%>'/>
     <textarea id="log_textarea" class="cbi-input-textarea" style="width: 100%;margin-top: 10px;" data-update="change" rows="40" wrap="off" readonly="readonly"></textarea>
 </div>
 

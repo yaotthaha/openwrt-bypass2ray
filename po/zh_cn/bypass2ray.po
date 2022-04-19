@@ -232,7 +232,7 @@ msgstr "订阅"
 msgid "Follow Redirect"
 msgstr "允许重定向"
 
-msgid "Delete Peer List"
+msgid "Delete PeerList"
 msgstr "删除节点列表"
 
 msgid "User level"
@@ -282,6 +282,15 @@ msgstr "微信通话"
 
 msgid "Config File: "
 msgstr "配置文件："
+
+msgid "Config File"
+msgstr "配置文件"
+
+msgid "Ray file"
+msgstr "Ray 可执行文件"
+
+msgid "Resource Location"
+msgstr "资源位置"
 
 msgid "Disable Insecure Encryption"
 msgstr "禁用不安全的加密"
@@ -339,6 +348,9 @@ msgstr "一次性读取"
 
 msgid "Access log file"
 msgstr "访问日志文件"
+
+msgid "Custom Config file"
+msgstr "自定义配置文件"
 
 msgid "Use custom config file."
 msgstr "使用自定义配置文件"
@@ -477,3 +489,69 @@ msgstr "仅 Xray 支持"
 
 msgid "Header Type"
 msgstr "头部类型"
+
+msgid "Running Status"
+msgstr "运行状态"
+
+msgid "NOT RUNNING"
+msgstr "未运行"
+
+msgid "RUNNING"
+msgstr "运行中"
+
+msgid "Touch Check"
+msgstr "点击检查"
+
+msgid "Baidu Connection"
+msgstr "百度连接状态"
+
+msgid "Google Connection"
+msgstr "Google 连接状态"
+
+msgid "GitHub Connection"
+msgstr "GitHub 连接状态"
+
+msgid "Update From PeerList"
+msgstr "从节点列表更新"
+
+msgid "Update PeerList"
+msgstr "更新节点列表"
+
+msgid "Update All"
+msgstr "全部更新"
+
+msgid "Config File: %s"
+msgstr "配置文件：%s"
+
+msgid "Subscribe Peers"
+msgstr "订阅节点"
+
+msgid "Main Log"
+msgstr "主日志"
+
+msgid "All Log"
+msgstr "全日志"
+
+msgid "Access Log"
+msgstr "访问日志"
+
+msgid "Error Log"
+msgstr "错误日志"
+
+msgid "Clear Log"
+msgstr "清除日志"
+
+msgid "Flush Log"
+msgstr "刷新日志"
+
+msgid "Start Delay"
+msgstr "测试延迟"
+
+msgid "Check..."
+msgstr "测试中..."
+
+msgid "Working..."
+msgstr "连接正常"
+
+msgid "Problem detected!"
+msgstr "连接失败"
