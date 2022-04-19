@@ -14,6 +14,9 @@ end
 
 local alias = uci:get(appname, subsid, "alias")
 local peerlist = uci:get_list(appname, subsid, "peerlist")
+local include = uci:get(appname, subsid, "include")
+local exclude = uci:get(appname, subsid, "exclude")
+local mode = uci:get(appname, subsid, "mode") or "1"
 
 support.LogToFile("==== 添加订阅节点到出站" .. alias .. " ====")
 
@@ -25,6 +28,47 @@ end
 if type(peerlist) ~= "table" or #peerlist <= 0 then
     support.LogToFile("获取信息失败")
     return -1
+end
+
+function Filter(keyword)
+    print(keyword)
+    if mode == "1" then
+        local ok = true
+        if type(include) == "table" then
+            for _, v in ipairs(include) do
+                if keyword:find(v, 1, true) then
+                    ok = true
+                end
+            end
+        end
+        if type(exclude) == "table" then
+            for _, v in ipairs(exclude) do
+                if keyword:find(v, 1, true) then
+                    ok = false
+                end
+            end
+        end
+        return ok
+    elseif mode == "2" then
+        local ok = true
+        if type(exclude) == "table" then
+            for _, v in ipairs(exclude) do
+                if keyword:find(v, 1, true) then
+                    ok = false
+                end
+            end
+        end
+        if type(include) == "table" then
+            for _, v in ipairs(include) do
+                if keyword:find(v, 1, true) then
+                    ok = true
+                end
+            end
+        end
+        return ok
+    else
+        return true
+    end
 end
 
 -- Add VMess
@@ -54,6 +98,9 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
         cfg_alias = t["ps"]
     end
     --
+    if not Filter(cfg_alias) then
+        return 1
+    end
     if type(filterFunc) == "function" and not filterFunc(cfg_alias) then
         return 1
     end
@@ -281,6 +328,9 @@ function AddShadowsocks(info, commit, filterFunc)
 	else
 		Alias = support.urlDecode(Alias)
 	end
+    if not Filter(Alias) then
+        return 1
+    end
     if type(filterFunc) == "function" and not filterFunc(Alias) then
         return 1
     end
@@ -312,12 +362,12 @@ function Add(link, commit, filterFunc)
 		local msg = support.base64Decode(M)
 		---- From https://github.com/2dust/v2rayN/wiki/%E5%88%86%E4%BA%AB%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E(ver-2)
 		local cfgjson = jsonc.parse(msg)
-		AddVMess(cfgjson, commit, filterFunc, false, false)
+		return AddVMess(cfgjson, commit, filterFunc, false, false)
 	elseif linkLst[1] == "ss" then
 		local linkLst_copy = linkLst
 		table.remove(linkLst_copy, 1)
 		local info = table.concat(linkLst_copy, ":")
-		AddShadowsocks(info, commit, filterFunc)
+		return AddShadowsocks(info, commit, filterFunc)
 	else
 		return -1
 	end

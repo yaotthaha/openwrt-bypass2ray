@@ -88,18 +88,8 @@ local dsp = require "luci.dispatcher"
 	<legend>
 		<%:Subscribe Peers%>
 	</legend>
-    <br/>
-    <input id="start_delay" class="btn cbi-button cbi-button-save" type="button" onclick="test_delay()" value='Start Delay'/>
-    <br/>
-	<div id="peers">
-        <div class="pure-u-1-4 check">
-			<div class="block pure-g">
-				<div class="pure-u-2-3">
-					<h4 id="status_baidu">Null<br/><span id="_baidu_status" class="red"><%:Touch Check%></span></h4>
-				</div>
-			</div>
-		</div>
-    </div>
+    <p id="start_delay"><p/>
+	<div id="peers"></div>
 </fieldset>
 
 <script type="text/javascript">
@@ -133,6 +123,9 @@ local dsp = require "luci.dispatcher"
                 Write += item.alias + '</span></h4><h4 id="delay">......</h4></div></div></div></div>';
             });
             document.getElementById("peers").innerHTML = Write;
+            if (Write != "") {
+                document.getElementById("start_delay").innerHTML = '<input id="start_delay" class="btn cbi-button cbi-button-save" type="button" onclick="test_delay()" value=\'Start Delay\'/>'
+            }
             peer_data = data;
         }
     }
