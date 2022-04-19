@@ -8,5 +8,7 @@ uci -q batch <<-EOF >/dev/null
 EOF
 
 [ ! -s "/etc/config/bypass2ray" ] && cp -f /usr/share/bypass2ray/default_config /etc/config/bypass2ray
+chmod 0755 /etc/init.d/bypass2ray
+chmod 0755 /usr/share/bypass2ray/app.sh
 rm -f /tmp/luci-indexcache
 rm -rf /tmp/luci-modulecache/
