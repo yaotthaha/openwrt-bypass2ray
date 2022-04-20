@@ -160,7 +160,9 @@ for _, v in ipairs(InboundCfg) do
             if v["settings_dokodemodoor_followredirect"] then
                 settings["followRedirect"] = true
             end
-            if next(settings) ~= nil then TempTable["settings"] = settings end
+            if next(settings) ~= nil then 
+                TempTable["settings"] = settings 
+            end
         elseif v["protocol"] == "http" then
             local settings = {}
             if v["settings_http_account_user"] then

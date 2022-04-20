@@ -97,6 +97,14 @@ elseif m.uci:get(appname, uuid) == "routing_balancer" then
 
 	o = s:option(DynamicList, "selector", translate("Selector"))
 	o.rmempty = false
+	uci:foreach(appname, "outbound", function(t)
+		if t["tag"] ~= nil then
+			if t["enable"] ~= "1" then
+				return
+			end
+			o:value(t["tag"], t["alias"])
+		end
+	end)
 
 	return m
 else

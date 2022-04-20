@@ -358,12 +358,12 @@ local dsp = require "luci.dispatcher"
                     '" style="cursor: pointer;"><div class="block pure-g"><div class="pure-u-2-3" style="cursor: pointer;"><h4>'
                 Write += protocol + '<br/><span class="' + colorShow + '" onclick="jumpToPeer(\'' + item.id + '\')">'
                 Write += item.alias + '</span></h4><h4 id="delay" onclick="test_delay_one(\'' + item.id +
-                    '\')">Touch Start Delay</h4></div></div></div></div>';
+                    '\')"><%:Start Delay%></h4></div></div></div></div>';
             });
             document.getElementById("peers").innerHTML = Write;
             if (Write != "") {
                 document.getElementById("start_delay").innerHTML =
-                    '<input id="start_delay" class="btn cbi-button cbi-button-save" type="button" onclick="test_delay()" value=\'Start Delay\'/>'
+                    '<input id="start_delay" class="btn cbi-button cbi-button-save" type="button" onclick="test_delay()" value=\'<%:Start Delay%>\'/>'
             }
             peer_data = data;
         }

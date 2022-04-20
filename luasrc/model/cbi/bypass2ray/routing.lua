@@ -107,9 +107,28 @@ o.cfgvalue = function (_, n)
 	end
 end
 
-o = s:option(DummyValue, "balancertag", translate("BalancerTag"))
-o.cfgvalue = function (...)
-	return Value.cfgvalue(...) or "-"
+o = s:option(DummyValue, "balancertag", translate("BalancerAlias"))
+o.cfgvalue = function (_, n)
+	local Value = uci:get(appname, n, "balancertag")
+	if Value == nil or Value == "" then
+		return "-"
+	end
+	local V
+	uci:foreach(appname, "routing_balancer", function(s)
+		if s["tag"] == nil or s["tag"] ~= Value then
+			return
+		end
+		if s["alias"] ~= nil and s["alias"] ~= "" then
+			V = s["alias"]
+		else
+			V = "?"
+		end
+	end)
+	if V == nil or V == "" then
+		return "-"
+	else
+		return V
+	end
 end
 
 -- Balancer
@@ -137,22 +156,18 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or false
 end
 
-o = s:option(DummyValue, "tag", translate("Tag"))
-o.cfgvalue = function (...)
-	return Value.cfgvalue(...) or "?"
-end
-
 o = s:option(DummyValue, "selector", translate("Selector"))
 o.cfgvalue = function (_, n)
 	local Value = uci:get(appname, n, "selector")
-	if type(Value) == "table" then
-		if table.getn(Value) <= 0 then
-			return "-"
-		end
+	if type(Value) == "table" or table.getn(Value) <= 0 then
 		local S = {}
-		for _, V in ipairs(Value) do
-			table.insert(S, V)
-		end
+		uci:foreach(appname, "outbound", function(s)
+			for _, V in ipairs(Value) do
+				if s["tag"] == V then
+					table.insert(S, s["alias"])
+				end
+			end
+		end)
 		return jsonc.stringify(S, 1)
 	else
 		return "-"

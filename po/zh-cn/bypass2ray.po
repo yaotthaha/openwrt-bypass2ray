@@ -442,6 +442,9 @@ msgstr "无法获取 Ray 版本"
 msgid "OutboundTag"
 msgstr "出站标识"
 
+msgid "BalancerAlias"
+msgstr "均衡器标签"
+
 msgid "BalancerTag"
 msgstr "均衡器标识"
 
@@ -555,3 +558,12 @@ msgstr "连接正常"
 
 msgid "Problem detected!"
 msgstr "连接失败"
+
+msgid "Include"
+msgstr "包含列表"
+
+msgid "Exclude"
+msgstr "排除列表"
+
+msgid "Tag"
+msgstr "标识"
