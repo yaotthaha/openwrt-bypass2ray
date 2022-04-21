@@ -57,8 +57,8 @@ o.placeholder = "/usr/share/bypass2ray/"
 o.default = "/usr/share/bypass2ray/"
 
 o = s:option(Value, "tmp_dir", translate("Temp Dir"))
-o.placeholder = "/tmp/bypass2ray"
-o.default = "/tmp/bypass2ray"
+o.placeholder = "/tmp/bypass2ray/"
+o.default = "/tmp/bypass2ray/"
 
 o = s:option(Value, "config_file", translate("Custom Config file"), translate("Use custom config file."))
 o.datatype = "file"

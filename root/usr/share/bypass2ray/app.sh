@@ -37,7 +37,7 @@ logcheck() {
 start() {
     logcheck
     log "==== 启动程序 ===="
-    TMPDIR=$(config_n_get global tmp_dir /tmp/bypass2ray)
+    TMPDIR=$(config_n_get global tmp_dir "/tmp/bypass2ray/")
     if [ -z "$TMPDIR" ]; then
         echo "Temp Dir is nil"
         log "临时文件夹路径未找到"
@@ -46,8 +46,10 @@ start() {
     if [ ! -d "$TMPDIR" ]; then
         mkdir -p $TMPDIR
     fi
-    rm -rf $TMPDIR/*
-    CONFIG="$TMPDIR/${NAME}_run.json"
+    if [ ! -z "$TMPDIR" ]; then
+        rm -rf $TMPDIR
+    fi
+    CONFIG="${TMPDIR}${NAME}_run.json"
     PRESETCFG=$(config_n_get global config_file)
     if [ -f "$PRESETCFG" ]; then
         ln -s $PRESETCFG $CONFIG
@@ -56,10 +58,10 @@ start() {
     fi
     log "配置文件: $CONFIG"
     BINARYFILE=$(config_n_get global binary_file "/usr/bin/xray")
-    RUNFILE="/usr/share/bypass2ray/ray"
+    RUNFILE="${TMPDIR}xray"
     if [ -f "$BINARYFILE" ]; then
         if [ ! -f "$RUNFILE"]; then
-            cp $BINARYFILE $RUNFILE
+            ln -sf $BINARYFILE $RUNFILE
         fi
     else
         echo "binary_file not found"
@@ -80,7 +82,7 @@ start() {
         export V2RAY_LOCATION_ASSET=$(config_n_get global resource_location "/usr/share/bypass2ray/")
         export XRAY_LOCATION_ASSET=$V2RAY_LOCATION_ASSET
         log "启动程序"
-        nohup $RUNFILE run -config $CONFIG >$TMPDIR/all.log 2>&1 &
+        nohup $RUNFILE run -config $CONFIG >${TMPDIR}all.log 2>&1 &
         id=$(echo $!)
         log "PID: $id"
         echo $id >$PID
@@ -104,7 +106,9 @@ stop() {
         kill $(cat $PID) >/dev/null 2>&1
         rm -f $PID
         log "结束进程: $(cat $PID)"
-        rm -rf $TMPDIR/*
+        if [ ! -z "$TMPDIR" ]; then
+            rm -rf $TMPDIR
+        fi
         log "清空临时文件夹: $TMPDIR"
         lua /usr/share/bypass2ray/run_scripts.lua astop | while read l; do [ -z "$l" ] || echo $l && log $l; done
     fi
