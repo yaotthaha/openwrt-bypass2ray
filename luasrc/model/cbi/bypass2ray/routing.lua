@@ -30,6 +30,11 @@ o:value("AsIs")
 o:value("IPIfNonMatch")
 o:value("IPOnDemand")
 
+o = s:option(ListValue, "domainmatcher", translate("DomainMatcher"))
+o:value("linear")
+o:value("mph")
+o.default = "linear"
+
 -- Rule
 
 s = m:section(TypedSection, "routing_rule", translate("Rule"))
@@ -159,12 +164,12 @@ end
 o = s:option(DummyValue, "selector", translate("Selector"))
 o.cfgvalue = function (_, n)
 	local Value = uci:get(appname, n, "selector")
-	if type(Value) == "table" or table.getn(Value) <= 0 then
-		local S = {}
+	if type(Value) == "table" and #Value > 0 then
+		local S = Value
 		uci:foreach(appname, "outbound", function(s)
-			for _, V in ipairs(Value) do
+			for K, V in ipairs(Value) do
 				if s["tag"] == V then
-					table.insert(S, s["alias"])
+					S[K] = s["alias"]
 				end
 			end
 		end)

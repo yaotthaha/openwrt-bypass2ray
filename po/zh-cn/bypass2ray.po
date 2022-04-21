@@ -567,3 +567,21 @@ msgstr "排除列表"
 
 msgid "Tag"
 msgstr "标识"
+
+msgid "SubscribeAlias"
+msgstr "订阅标签"
+
+msgid "Strategy Type"
+msgstr "策略类型"
+
+msgid "Observatory"
+msgstr "连接观测"
+
+msgid "SubjectSelector"
+msgstr "主体选择器"
+
+msgid "probeurl"
+msgstr "探测地址"
+
+msgid "probeinterval"
+msgstr "探测间隔"

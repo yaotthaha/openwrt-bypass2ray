@@ -27,6 +27,8 @@ function index()
     entry({"admin", "services", appname, "routing"},
 		arcombine(cbi(appname .. "/routing"), cbi(appname .. "/routing_detail")),
 		_("Routing"), 5).leaf = true
+	-- [[ Observatory ]]
+	entry({"admin", "services", appname, "observatory"}, cbi(appname .. "/observatory"), _("Observatory"), 15).dependent = true
     -- [[ DNS ]]
     entry({"admin", "services", appname, "dns"},
 		arcombine(cbi(appname .. "/dns"), cbi(appname .. "/dns_detail")),

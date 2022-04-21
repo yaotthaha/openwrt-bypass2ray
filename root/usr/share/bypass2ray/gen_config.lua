@@ -51,6 +51,19 @@ function GetRoutingBalancer()
     return tablePre
 end
 
+function GetObservatory()
+    local tablePre = {}
+    uci:foreach(appname, "observatory", function(s)
+        table.insert(tablePre, s)
+    end)
+    if #tablePre > 0 and #tablePre < 2 then
+        tablePre = tablePre[1]
+    else
+        return tablePre[1]
+    end
+    return tablePre
+end
+
 function GetGlobal()
     local tablePre = {}
     uci:foreach(appname, "global", function(s)
@@ -1020,6 +1033,9 @@ for _, v in ipairs(RoutingGlobalCfg) do
     if v["domainstrategy"] then
         routing["domainStrategy"] = v["domainstrategy"]
     end
+    if v["domainmatcher"] then
+        routing["domainMatcher"] = v["domainmatcher"]
+    end
 end
 
 for _, v in ipairs(RoutingRuleCfg) do
@@ -1085,12 +1101,32 @@ for _, v in ipairs(RoutingBalancerCfg) do
         if v["selector"] then
             s["selector"] = v["selector"]
         end
+        if v["strategy_type"] then
+            if not s["strategy"] then
+                s["strategy"] = {}
+            end
+            s["strategy"]["type"] = v["strategy_type"]
+        end
         table.insert(routing_balancer, s)
     end
 end
 
 if next(routing_balancer) ~= nil then
     routing["balancers"] = routing_balancer
+end
+
+local observatory = GetObservatory()
+local observatoryS = {}
+if observatory["enable"] == "1" then
+    if observatory["subjectselector"] and type(observatory["subjectselector"]) and #(observatory["subjectselector"]) > 0 then
+        observatoryS["subjectSelector"] = observatory["subjectselector"]
+    end
+    if observatory["probeurl"] then
+        observatoryS["probeURL"] = observatory["probeurl"]
+    end
+    if observatory["probeinterval"] then
+        observatoryS["probeInterval"] = observatory["probeinterval"]
+    end
 end
 
 ----
@@ -1128,6 +1164,9 @@ if next(inbounds) ~= nil then
 end
 if next(routing) ~= nil then
     cfg["routing"] = routing
+end
+if next(observatoryS) ~= nil then
+    cfg["observatory"] = observatoryS
 end
 
 cfgjson = jsonc.stringify(cfg, 1)

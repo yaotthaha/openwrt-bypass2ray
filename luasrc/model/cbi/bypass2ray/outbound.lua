@@ -28,6 +28,19 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "?"
 end
 
+o = s:option(DummyValue, "subscribe_tag", translate("SubscribeAlias"))
+o.cfgvalue = function(_, n)
+	local Value = uci:get(appname, n, "subscribe_tag")
+	local ReturnV = "-"
+	if Value ~= nil and Value ~= "" then
+		local Sub = uci:get(appname, Value, "alias")
+		if Sub ~= nil and Sub ~= "" then
+			ReturnV = Sub
+		end
+	end
+	return ReturnV
+end
+
 o = s:option(DummyValue, "protocol", translate("Protocol"))
 o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "?"

@@ -43,11 +43,11 @@ if m.uci:get(appname, uuid) == "routing_rule" then
 
 	o = s:option(DynamicList, "inboundtag", translate("InboundTag"))
 	uci:foreach(appname, "inbound", function(t)
-		if t["tag"] ~= nil then
-			if t["enable"] ~= "1" then
+		if t["enable"] == "1" then
+			if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
 				return
 			end
-			o:value(t["tag"], t["alias"])
+			o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
 		end
 	end)
 
@@ -61,22 +61,22 @@ if m.uci:get(appname, uuid) == "routing_rule" then
 	o = s:option(ListValue, "outboundtag", translate("OutboundTag"))
 	o:value("")
 	uci:foreach(appname, "outbound", function(t)
-		if t["tag"] ~= nil then
-			if t["enable"] ~= "1" then
+		if t["enable"] == "1" then
+			if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
 				return
 			end
-			o:value(t["tag"], t["alias"])
+			o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
 		end
 	end)
 
 	o = s:option(ListValue, "balancertag", translate("BalancerTag"))
 	o:value("")
 	uci:foreach(appname, "routing_balancer", function(t)
-		if t["tag"] ~= nil then
-			if t["enable"] ~= "1" then
+		if t["enable"] == "1" then
+			if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
 				return
 			end
-			o:value(t["tag"])
+			o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
 		end
 	end)
 
@@ -98,13 +98,17 @@ elseif m.uci:get(appname, uuid) == "routing_balancer" then
 	o = s:option(DynamicList, "selector", translate("Selector"))
 	o.rmempty = false
 	uci:foreach(appname, "outbound", function(t)
-		if t["tag"] ~= nil then
-			if t["enable"] ~= "1" then
+		if t["enable"] == "1" then
+			if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
 				return
 			end
-			o:value(t["tag"], t["alias"])
+			o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
 		end
 	end)
+
+	o = s:option(ListValue, "strategy_type", translate("Strategy Type"))
+	o:value("random")
+	o:value("leastPing")
 
 	return m
 else
