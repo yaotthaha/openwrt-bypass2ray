@@ -225,7 +225,7 @@ function AddVMess(t, commit, filterFunc, enable, mark) -- t => table
     local uuid = support.gen_uuid()
     uci:set(appname, uuid, "outbound")
     uci:set(appname, uuid, "enable", "0")
-    uci:set(appname, uuid, "alias", cfg_alias)
+    uci:set(appname, uuid, "alias", alias .. " - " .. cfg_alias)
     --
     uci:set(appname, uuid, "subscribe_tag", subsid)
     uci:set(appname, uuid, "tag", string.sub(subsid, 1, 16) .. string.sub(uuid, 1, 16))
@@ -337,7 +337,7 @@ function AddShadowsocks(info, commit, filterFunc)
 	local uuid = support.gen_uuid()
 	uci:set(appname, uuid, "outbound")
 	uci:set(appname, uuid, "enable", "0")
-	uci:set(appname, uuid, "alias", Alias)
+	uci:set(appname, uuid, "alias", alias .. " - " ..  Alias)
     --
 	uci:set(appname, uuid, "subscribe_tag", subsid)
     uci:set(appname, uuid, "tag", string.sub(subsid, 1, 16) .. string.sub(uuid, 1, 16))
