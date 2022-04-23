@@ -1,0 +1,11 @@
+{
+	"luci-app-bypass2ray": {
+		"description": "Grant UCI access for luci-app-bypass2ray",
+		"read": {
+			"uci": [ "bypass2ray" ]
+		},
+		"write": {
+			"uci": [ "bypass2ray" ]
+		}
+	}
+}

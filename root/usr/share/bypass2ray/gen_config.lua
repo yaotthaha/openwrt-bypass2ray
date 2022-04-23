@@ -131,7 +131,7 @@ local routing_rule = {}
 local routing_balancer = {}
 
 for _, v in ipairs(InboundCfg) do
-    if v["enable"] then
+    if v["enable"] == "1" then
         local TempTable = {}
         if v["alias"] then
             TempTable["alias"] = v["alias"]
@@ -598,7 +598,7 @@ for _, v in ipairs(InboundCfg) do
 end
 
 for _, v in ipairs(OutboundCfg) do
-    if v["enable"] then
+    if v["enable"] == "1" then
         local TempTable = {}
         if v["tag"] then
             TempTable["tag"] = v["tag"]
@@ -1039,7 +1039,7 @@ for _, v in ipairs(RoutingGlobalCfg) do
 end
 
 for _, v in ipairs(RoutingRuleCfg) do
-    if v["enable"] then
+    if v["enable"] == "1" then
         local s = {}
         if v["alias"] then
             s["alias"] = v["alias"]
@@ -1093,7 +1093,7 @@ if next(routing_rule) ~= nil then
 end
 
 for _, v in ipairs(RoutingBalancerCfg) do
-    if v["enable"] then
+    if v["enable"] == "1" then
         local s = {}
         if v["tag"] then
             s["tag"] = v["tag"]

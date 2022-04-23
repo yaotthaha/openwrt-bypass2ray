@@ -1,5 +1,6 @@
 local dsp = require "luci.dispatcher"
-local appname = require "luci.model.cbi.bypass2ray.support".appname
+local support = require "luci.model.cbi.bypass2ray.support"
+local appname = support.appname
 local sys = require "luci.sys"
 local uci = require "luci.model.uci".cursor()
 local m, s, o
@@ -25,7 +26,7 @@ o = s:option(Value, "url", translate("URL"))
 o.datatype = "string"
 
 o = s:option(Value, "shell", translate("Shell"), translate("Use `::url::` Instead $URL"))
-local shell_default = "curl -kfsSL '::url::' --user-agent '\'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36\'' --retry 3 --connect-timeout 3 --max-time 30"
+local shell_default = "curl -kfsSL '::url::' --user-agent '" .. support.ua .. "' --retry 3 --connect-timeout 3 --max-time 30"
 o.placeholder = shell_default
 o.default = shell_default
 
