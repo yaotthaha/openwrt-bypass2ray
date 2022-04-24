@@ -22,12 +22,12 @@ s = m:section(TypedSection, "other_settings_scripts", translate("Scripts"))
 s.anonymous = true
 s.addremove = false
 
-s:option(DynamicList, "before_start_script", translate("Before Start Scripts"))
+s:option(DynamicList, "pre_start_script", translate("Pre Start Scripts"))
 
-s:option(DynamicList, "before_stop_script", translate("Before Stop Scripts"))
+s:option(DynamicList, "post_stop_script", translate("Post Stop Scripts"))
 
-s:option(DynamicList, "after_start_script", translate("After Start Scripts"))
+s:option(DynamicList, "pre_start_script", translate("Pre Start Scripts"))
 
-s:option(DynamicList, "after_stop_script", translate("After Stop Scripts"))
+s:option(DynamicList, "post_stop_script", translate("Post Stop Scripts"))
 
 return m

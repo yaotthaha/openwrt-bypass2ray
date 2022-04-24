@@ -187,7 +187,7 @@ msgstr "允许透明"
 msgid "Uplink Capacity"
 msgstr "上行链路容量"
 
-msgid "After Start Scripts"
+msgid "Post Start Scripts"
 msgstr "启动后脚本"
 
 msgid "Certificate File"
@@ -367,7 +367,7 @@ msgstr "加密"
 msgid "Metadata Only"
 msgstr "仅元数据"
 
-msgid "After Stop Scripts"
+msgid "Post Stop Scripts"
 msgstr "结束后脚本"
 
 msgid "TCP Fast Open"
@@ -442,19 +442,19 @@ msgstr "无法获取 Ray 版本"
 msgid "OutboundTag"
 msgstr "出站标识"
 
-msgid "BalancerAlias"
+msgid "Balancer Alias"
 msgstr "均衡器标签"
 
 msgid "BalancerTag"
 msgstr "均衡器标识"
 
-msgid "Before Start Scripts"
+msgid "Pre Start Scripts"
 msgstr "启动前脚本"
 
 msgid "Edit Routing"
 msgstr "编辑 路由"
 
-msgid "Before Stop Scripts"
+msgid "Pre Stop Scripts"
 msgstr "结束前脚本"
 
 msgid "Other Settings"
@@ -580,8 +580,11 @@ msgstr "连接观测"
 msgid "SubjectSelector"
 msgstr "主体选择器"
 
-msgid "probeurl"
+msgid "probeURL"
 msgstr "探测地址"
 
-msgid "probeinterval"
+msgid "probeInterval"
 msgstr "探测间隔"
+
+msgid "DomainMatcher"
+msgstr "域名匹配器"

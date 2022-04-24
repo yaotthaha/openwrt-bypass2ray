@@ -77,7 +77,7 @@ start() {
             log "程序已启动"
             exit 1
         fi
-        lua /usr/share/bypass2ray/run_scripts.lua bstart | while read l; do [ -z "$l" ] || echo $l && log $l; done
+        lua /usr/share/bypass2ray/run_scripts.lua prestart | while read l; do [ -z "$l" ] || echo $l && log $l; done
         ulimit -n 65535
         V2RAY_LOCATION_ASSET=$(config_n_get global resource_location "/usr/share/bypass2ray/")
         XRAY_LOCATION_ASSET=$V2RAY_LOCATION_ASSET
@@ -86,7 +86,7 @@ start() {
         id=$(echo $!)
         log "PID: $id"
         echo $id >$PID
-        lua /usr/share/bypass2ray/run_scripts.lua astart | while read l; do [ -z "$l" ] || echo $l && log $l; done
+        lua /usr/share/bypass2ray/run_scripts.lua poststart | while read l; do [ -z "$l" ] || echo $l && log $l; done
     fi
 }
 
@@ -102,7 +102,7 @@ stop() {
             log "临时文件夹路径未找到"
             exit 1
         fi
-        lua /usr/share/bypass2ray/run_scripts.lua bstop | while read l; do [ -z "$l" ] || echo $l && log $l; done
+        lua /usr/share/bypass2ray/run_scripts.lua prestop | while read l; do [ -z "$l" ] || echo $l && log $l; done
         kill $(cat $PID 2>/dev/null) >/dev/null 2>&1
         rm -f $PID
         log "结束进程: $(cat $PID)"
@@ -110,7 +110,7 @@ stop() {
             rm -rf ${TMPDIR}*
         fi
         log "清空临时文件夹: $TMPDIR"
-        lua /usr/share/bypass2ray/run_scripts.lua astop | while read l; do [ -z "$l" ] || echo $l && log $l; done
+        lua /usr/share/bypass2ray/run_scripts.lua poststop | while read l; do [ -z "$l" ] || echo $l && log $l; done
     fi
 }
 

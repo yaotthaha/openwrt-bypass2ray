@@ -18,12 +18,12 @@ function SearchScript(name)
     return cfg
 end
 
-if mode == "bstart" then
-    local scripts = SearchScript("before_start_script")
+if mode == "prestart" then
+    local scripts = SearchScript("pre_start_script")
     if type(scripts) == "table" then
         if table.getn(scripts) > 0 then
             for _, v in ipairs(scripts) do
-                print("Run Before Start Script: [" .. v .. "]")
+                print("Run Pre Start Script: [" .. v .. "]")
                 sys.call(v)
             end
         else
@@ -32,12 +32,12 @@ if mode == "bstart" then
     elseif scripts == -1 then
         print("Fail")
     end
-elseif mode == "astart" then
-    local scripts = SearchScript("after_start_script")
+elseif mode == "poststart" then
+    local scripts = SearchScript("post_start_script")
     if type(scripts) == "table" then
         if table.getn(scripts) > 0 then
             for _, v in ipairs(scripts) do
-                print("Run After Start Script: [" .. v .. "]")
+                print("Run Post Start Script: [" .. v .. "]")
                 sys.call(v)
             end
         else
@@ -46,12 +46,12 @@ elseif mode == "astart" then
     elseif scripts == -1 then
         print("Fail")
     end
-elseif mode == "bstop" then
-    local scripts = SearchScript("before_stop_script")
+elseif mode == "prestop" then
+    local scripts = SearchScript("pre_stop_script")
     if type(scripts) == "table" then
         if table.getn(scripts) > 0 then
             for _, v in ipairs(scripts) do
-                print("Run Before Stop Script: [" .. v .. "]")
+                print("Run Pre Stop Script: [" .. v .. "]")
                 sys.call(v)
             end
         else
@@ -60,12 +60,12 @@ elseif mode == "bstop" then
     elseif scripts == -1 then
         print("Fail")
     end
-elseif mode == "astop" then
-    local scripts = SearchScript("after_stop_script")
+elseif mode == "poststop" then
+    local scripts = SearchScript("post_stop_script")
     if type(scripts) == "table" then
         if table.getn(scripts) > 0 then
             for _, v in ipairs(scripts) do
-                print("Run After Stop Script: [" .. v .. "]")
+                print("Run Post Stop Script: [" .. v .. "]")
                 sys.call(v)
             end
         else

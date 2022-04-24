@@ -88,6 +88,7 @@ o.cfgvalue = function (_, n)
 	return jsonc.stringify(R, 1)
 end
 
+--[[
 o = s:option(DummyValue, "outboundtag", translate("Outbound Alias"))
 o.cfgvalue = function (_, n)
 	local Value = uci:get(appname, n, "outboundtag")
@@ -111,7 +112,20 @@ o.cfgvalue = function (_, n)
 		return V
 	end
 end
+]]--
 
+o = s:option(ListValue, "outboundtag", translate("Outbound Alias"))
+o:value("")
+uci:foreach(appname, "outbound", function(t)
+	if t["enable"] == "1" then
+		if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
+			return
+		end
+		o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
+	end
+end)
+
+--[[
 o = s:option(DummyValue, "balancertag", translate("BalancerAlias"))
 o.cfgvalue = function (_, n)
 	local Value = uci:get(appname, n, "balancertag")
@@ -135,6 +149,18 @@ o.cfgvalue = function (_, n)
 		return V
 	end
 end
+]]--
+
+o = s:option(ListValue, "balancertag", translate("Balancer Alias"))
+o:value("")
+uci:foreach(appname, "routing_balancer", function(t)
+	if t["enable"] == "1" then
+		if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
+			return
+		end
+		o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
+	end
+end)
 
 -- Balancer
 
@@ -161,6 +187,7 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or false
 end
 
+--[[
 o = s:option(DummyValue, "selector", translate("Selector"))
 o.cfgvalue = function (_, n)
 	local Value = uci:get(appname, n, "selector")
@@ -178,5 +205,17 @@ o.cfgvalue = function (_, n)
 		return "-"
 	end
 end
+]]--
+
+o = s:option(DynamicList, "selector", translate("Selector"))
+o.rmempty = false
+uci:foreach(appname, "outbound", function(t)
+	if t["enable"] == "1" then
+		if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
+			return
+		end
+		o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
+	end
+end)
 
 return m
