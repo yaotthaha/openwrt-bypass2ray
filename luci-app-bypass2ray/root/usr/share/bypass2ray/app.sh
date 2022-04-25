@@ -102,10 +102,11 @@ stop() {
             log "临时文件夹路径未找到"
             exit 1
         fi
+        PID_N=$(cat $PID)
         lua /usr/share/bypass2ray/run_scripts.lua prestop | while read l; do [ -z "$l" ] || echo $l && log $l; done
-        kill $(cat $PID 2>/dev/null) >/dev/null 2>&1
+        kill $PID_N >/dev/null 2>&1
         rm -f $PID
-        log "结束进程: $(cat $PID)"
+        log "结束进程: $PID_N"
         if [ ! -z "$TMPDIR" ]; then
             rm -rf ${TMPDIR}*
         fi

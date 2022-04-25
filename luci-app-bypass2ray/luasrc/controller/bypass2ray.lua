@@ -191,6 +191,7 @@ function clear_error_log()
 end
 
 function get_outbound_delay_inside(id)
+	local tcping = "tcping"
 	local cfg = uci:get_all(appname, id)
 	local allow_protocol = {"vmess", "vless", "shadowsocks", "socks", "http", "trojan"}
 	local inside = false
@@ -226,10 +227,10 @@ function get_outbound_delay_inside(id)
 	if address == nil or address == "" or port == nil or port == "" then
 		return "-"
 	end
-	if sys.exec("echo -n $(tcping -h >/dev/null 2>&1 || echo 'fail')") == "fail" then
+	if sys.exec("echo -n $(" .. tcping .. " -h >/dev/null 2>&1 || echo 'fail')") == "fail" then
 		return "-"
 	end
-	local pingStr = sys.exec(string.format("echo -n $(tcping -q -c 1 -i 1 -t 2 -p %s %s 2>&1 | grep -o 'time=[0-9].*' | awk -F '=' '{print $2}' | awk '{print $1}') 2>/dev/null", port, address))
+	local pingStr = sys.exec(string.format("echo -n $(" .. tcping .. " -q -c 1 -i 1 -t 2 -p %s %s 2>&1 | grep -o 'time=[0-9].*' | awk -F '=' '{print $2}' | awk '{print $1}') 2>/dev/null", port, address))
 	if pingStr == nil or pingStr == "" then
 		return "Timeout"
 	end

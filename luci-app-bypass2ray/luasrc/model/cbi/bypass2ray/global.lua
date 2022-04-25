@@ -1,6 +1,8 @@
 local uci = require "luci.model.uci".cursor()
+local dsp = require "luci.dispatcher"
 local sys = require "luci.sys"
-local appname = require "luci.model.cbi.bypass2ray.support".appname
+local support = require "luci.model.cbi.bypass2ray.support"
+local appname = support.appname
 
 function IsExist(appName, type)
 	local exist = false
@@ -17,6 +19,8 @@ end
 
 m = Map(appname, "%s - %s" % { translate("ByPass2Ray"), translate("Global") })
 
+m.redirect = dsp.build_url("admin/services/" .. appname)
+
 m:append(Template(appname .. "/connect_status"))
 
 m:append(Template(appname .. "/status_header"))
@@ -31,19 +35,22 @@ o.default = 0
 o = s:option(Button, "_start", translate("Start Service"))
 o.inputstyle = "start"
 o.write = function ()
-	sys.call("/etc/init.d/" .. appname .. " start 2>/dev/null")
+	sys.call("/etc/init.d/" .. appname .. " start >/dev/null 2>&1 &")
+	luci.http.redirect(m.redirect)
 end
 
 o = s:option(Button, "_stop", translate("Stop Service"))
 o.inputstyle = "stop"
 o.write = function ()
-	sys.call("/etc/init.d/" .. appname .. " stop 2>/dev/null")
+	sys.call("/etc/init.d/" .. appname .. " stop >/dev/null 2>&1 &")
+	luci.http.redirect(m.redirect)
 end
 
 o = s:option(Button, "_restart", translate("Restart Service"))
 o.inputstyle = "restart"
 o.write = function ()
-	sys.call("/etc/init.d/" .. appname .. " restart 2>/dev/null")
+	sys.call("/etc/init.d/" .. appname .. " restart >/dev/null 2>&1 &")
+	luci.http.redirect(m.redirect)
 end
 
 o = s:option(Value, "binary_file", translate("Ray file"), "<em>%s</em>" % translate("Collecting data..."))
