@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-bypass2ray
 PKG_VERSION:=1.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_$(PKG_NAME)_Transparent_Proxy
@@ -12,7 +12,8 @@ PKG_CONFIG_DEPENDS:= \
 LUCI_TITLE:=LuCI support for ByPass2Ray
 LUCI_PKGARCH:=all
 LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
-	+ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc +resolveip +sudo +tcping
+	+ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc \
+	+resolveip +sudo +tcping +lua-md5
 
 define Package/$(PKG_NAME)/config
 menu "Configuration"

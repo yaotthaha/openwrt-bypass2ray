@@ -588,3 +588,6 @@ msgstr "探测间隔"
 
 msgid "DomainMatcher"
 msgstr "域名匹配器"
+
+msgid "Outbound Mark"
+msgstr "出站Mark标记"

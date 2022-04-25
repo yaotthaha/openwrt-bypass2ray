@@ -39,6 +39,8 @@ o:value("1", translate("Include --> Exclude"))
 o:value("2", translate("Exclude --> Include"))
 o.default = "1"
 
+o = s:option(Value, "so_mark", translate("Outbound Mark"))
+
 o = s:option(Button, "_update_all", translate("Update All"))
 o.inputstyle = "save"
 function o.write(t, n)
