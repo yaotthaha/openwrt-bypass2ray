@@ -1117,15 +1117,17 @@ end
 
 local observatory = GetObservatory()
 local observatoryS = {}
-if observatory["enable"] == "1" then
-    if observatory["subjectselector"] and type(observatory["subjectselector"]) and #(observatory["subjectselector"]) > 0 then
-        observatoryS["subjectSelector"] = observatory["subjectselector"]
-    end
-    if observatory["probeurl"] then
-        observatoryS["probeURL"] = observatory["probeurl"]
-    end
-    if observatory["probeinterval"] then
-        observatoryS["probeInterval"] = observatory["probeinterval"]
+if observatory ~= nil then
+    if observatory["enable"] == "1" then
+        if observatory["subjectselector"] and type(observatory["subjectselector"]) and #(observatory["subjectselector"]) > 0 then
+            observatoryS["subjectSelector"] = observatory["subjectselector"]
+        end
+        if observatory["probeurl"] then
+            observatoryS["probeURL"] = observatory["probeurl"]
+        end
+        if observatory["probeinterval"] then
+            observatoryS["probeInterval"] = observatory["probeinterval"]
+        end
     end
 end
 

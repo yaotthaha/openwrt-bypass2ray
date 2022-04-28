@@ -24,9 +24,9 @@ s.addremove = false
 
 s:option(DynamicList, "pre_start_script", translate("Pre Start Scripts"))
 
-s:option(DynamicList, "post_stop_script", translate("Post Stop Scripts"))
+s:option(DynamicList, "post_start_script", translate("Post Start Scripts"))
 
-s:option(DynamicList, "pre_start_script", translate("Pre Start Scripts"))
+s:option(DynamicList, "pre_stop_script", translate("Pre Stop Scripts"))
 
 s:option(DynamicList, "post_stop_script", translate("Post Stop Scripts"))
 
