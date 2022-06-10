@@ -44,7 +44,7 @@ o.cfgvalue = function(...)
 		return translate("File Not Found")
 	end
 	local msg_table = support.split(msg, "|")
-	return string.format("%s: %s %s: %s", translate("Size"), msg_table[1], translate("Update Time"), msg_table[2])
+	return string.format("%s: %s %s: %s", translate("File Size"), msg_table[1], translate("Update Time"), msg_table[2])
 end
 
 o = s:option(DummyValue, "_geosite_file_check", translate("GeoSite"))
@@ -54,7 +54,7 @@ o.cfgvalue = function(...)
 		return translate("File Not Found")
 	end
 	local msg_table = support.split(msg, "|")
-	return string.format("%s: %s %s: %s", translate("Size"), msg_table[1], translate("Update Time"), msg_table[2])
+	return string.format("%s: %s %s: %s", translate("File Size"), msg_table[1], translate("Update Time"), msg_table[2])
 end
 
 o = s:option(Button, "_update", translate("Update"))
