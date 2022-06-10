@@ -6,7 +6,8 @@ local jsonc = require "luci.jsonc"
 local restart = arg[1]
 local TEMPDIR = "/tmp/geodir"
 local ResourceDIR = "/usr/share/bypass2ray"
-local logtofile = "/tmp/geoupdate.log"
+--local logtofile = "/tmp/geoupdate.log"
+local logtofile = "/tmp/bypass2ray.log"
 
 local geosite_url = "https://raw.githubusercontent.com/yaotthaha/v2ray-rules-dat/release/geosite.dat"
 local geosite_sha256sum_url = "https://raw.githubusercontent.com/yaotthaha/v2ray-rules-dat/release/geosite.dat.sha256sum"

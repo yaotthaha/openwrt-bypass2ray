@@ -304,10 +304,10 @@ o.datatype = "host"
 o = s:option(Flag, "ss_tls_rejectunknownsni", "%s - %s" % { "(X)TLS", translate("Reject Unknown SNI") })
 o:depends("ss_security", "tls")
 
-o = s:option(MultiValue, "ss_tls_alpn", "%s - %s" % { "(X)TLS", "ALPN" })
+o = s:option(DynamicList, "ss_tls_alpn", "%s - %s" % { "(X)TLS", "ALPN" })
 o:depends("ss_security", "tls")
-o:value("h2")
-o:value("http/1.1")
+--o:value("h2")
+--o:value("http/1.1")
 
 o = s:option(ListValue, "ss_tls_minversion", "%s - %s" % { "(X)TLS", "Min Version" })
 o:depends("ss_security", "tls")
@@ -561,7 +561,9 @@ o = s:option(Flag, "sniffing_enabled", "%s - %s" %{ "Sniffing", translate("Enabl
 o = s:option(MultiValue, "sniffing_destoverride", "%s - %s" % { "Sniffing", translate("Dest Override") })
 o:value("http")
 o:value("tls")
+o:value("quic")
 o:value("fakedns")
+o:value("fakedns+other")
 
 o = s:option(Flag, "sniffing_metadataonly", "%s - %s" %{ "Sniffing", translate("Metadata Only") },
 	translate("仅使用连接的元数据嗅探目标地址"))

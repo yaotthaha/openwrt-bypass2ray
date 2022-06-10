@@ -272,10 +272,10 @@ o:depends("ss_security_tls_enable", "tls")
 o = s:option(Flag, "ss_tls_allowinsecure", "%s - %s" % { "(X)TLS", translate("Allow Insecure") })
 o:depends("ss_security_tls_enable", "tls")
 
-o = s:option(MultiValue, "ss_tls_alpn", "%s - %s" % { "(X)TLS", translate("ALPN") })
+o = s:option(DynamicList, "ss_tls_alpn", "%s - %s" % { "(X)TLS", translate("ALPN") })
 o:depends("ss_security_tls_enable", "tls")
-o:value("h2")
-o:value("http/1.1")
+--o:value("h2")
+--o:value("http/1.1")
 
 o = s:option(ListValue, "ss_tls_minversion", "%s - %s" % { "(X)TLS", translate("Min Version") })
 o:depends("ss_security_tls_enable", "tls")

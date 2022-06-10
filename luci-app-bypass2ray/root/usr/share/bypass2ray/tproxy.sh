@@ -1,7 +1,7 @@
 #!/bin/sh
 ###
 tproxy_port="12345"
-gid="1212"
+gid="1010"
 ipv4="1"
 ipv6="1"
 localcnip="1"

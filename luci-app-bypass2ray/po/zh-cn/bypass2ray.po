@@ -591,3 +591,30 @@ msgstr "域名匹配器"
 
 msgid "Outbound Mark"
 msgstr "出站Mark标记"
+
+msgid "Tips:"
+msgstr "提示："
+
+msgid "start:"
+msgstr "启动："
+
+msgid "stop:"
+msgstr "结束："
+
+msgid "Tproxy Global Script"
+msgstr "Tproxy 全局脚本"
+
+msgid "Tproxy Bypass CNIP Script"
+msgstr "Tproxy 绕过中国大陆IP脚本
+
+msgid "Geo File"
+msgstr "Geo 文件"
+
+msgid "File Not Found"
+msgstr "文件未找到"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Update Time"
+msgstr "更新时间"

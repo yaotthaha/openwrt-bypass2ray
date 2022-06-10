@@ -82,7 +82,7 @@ start() {
         V2RAY_LOCATION_ASSET=$(config_n_get global resource_location "/usr/share/bypass2ray/")
         XRAY_LOCATION_ASSET=$V2RAY_LOCATION_ASSET
         log "启动程序"
-        nohup env v2ray.location.asset=$V2RAY_LOCATION_ASSET env xray.location.asset=$XRAY_LOCATION_ASSET $RUNFILE run -config $CONFIG >${TMPDIR}all.log 2>&1 &
+        sudo -u bypass2ray nohup env v2ray.location.asset=$V2RAY_LOCATION_ASSET env xray.location.asset=$XRAY_LOCATION_ASSET $RUNFILE run -config $CONFIG >${TMPDIR}all.log 2>&1 &
         id=$(echo $!)
         log "PID: $id"
         echo $id >$PID

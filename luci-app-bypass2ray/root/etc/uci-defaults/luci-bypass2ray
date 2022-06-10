@@ -16,5 +16,14 @@ EOF
 chmod 0755 /etc/init.d/bypass2ray
 chmod 0755 /usr/share/bypass2ray/*.sh
 chmod 0755 /usr/share/bypass2ray/*.lua
+passwdfile="/etc/passwd"
+name="bypass2ray"
+gid="1010"
+line="$name:x::$gid:::"
+if [ "$(cat $passwdfile | cut -d':' -f1 | grep $name)" = "" ]; then
+	echo $line >>$passwdfile
+else
+	sed -i '/'$name'/s/.*/'$line'/g' $passwdfile
+fi
 rm -f /tmp/luci-indexcache
 rm -rf /tmp/luci-modulecache/

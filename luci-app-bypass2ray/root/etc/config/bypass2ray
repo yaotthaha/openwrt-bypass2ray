@@ -1,8 +1,6 @@
 
 config global 'global'
 	option binary_file '/usr/bin/xray'
-	option resource_location '/usr/share/bypass2ray'
-	option tmp_dir '/tmp/bypass2ray'
 	option access_log '/tmp/bypass2ray/bypass2ray_access.log'
 	option error_log '/tmp/bypass2ray/bypass2ray_error.log'
 	option loglevel 'info'

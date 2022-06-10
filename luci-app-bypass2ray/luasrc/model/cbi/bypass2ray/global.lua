@@ -58,14 +58,15 @@ o.datatype = "file"
 o.placeholder = "/usr/bin/xray"
 o.default = "/usr/bin/xray"
 
-o = s:option(Value, "resource_location", translate("Resource Location"))
-o.datatype = "directory"
-o.placeholder = "/usr/share/bypass2ray/"
-o.default = "/usr/share/bypass2ray/"
+o = s:option(DummyValue, "resource_location", translate("Resource Location"))
+o.cfgvalue = function(...)
+	return "/usr/share/bypass2ray/"
+end
 
-o = s:option(Value, "tmp_dir", translate("Temp Dir"))
-o.placeholder = "/tmp/bypass2ray/"
-o.default = "/tmp/bypass2ray/"
+o = s:option(DummyValue, "tmp_dir", translate("Temp Dir"))
+o.cfgvalue = function(...)
+	return "/tmp/bypass2ray/"
+end
 
 o = s:option(Value, "config_file", translate("Custom Config file"), translate("Use custom config file."))
 o.datatype = "file"

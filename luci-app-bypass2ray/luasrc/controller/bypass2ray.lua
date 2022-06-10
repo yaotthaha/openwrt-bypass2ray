@@ -191,7 +191,7 @@ function clear_error_log()
 end
 
 function get_outbound_delay_inside(id)
-	local tcping = "tcping"
+	local tcping = "sudo -u bypass2ray tcping"
 	local cfg = uci:get_all(appname, id)
 	local allow_protocol = {"vmess", "vless", "shadowsocks", "socks", "http", "trojan"}
 	local inside = false

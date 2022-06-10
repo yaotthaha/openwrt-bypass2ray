@@ -332,7 +332,7 @@ for _, v in ipairs(InboundCfg) do
                 tls["rejectUnknownSni"] = true
             end
             if v["ss_tls_alpn"] then
-                tls["alpn"] = split(v["ss_tls_alpn"], " ")
+                tls["alpn"] = v["ss_tls_alpn"]
             end
             if v["ss_tls_allowinsecure"] then
                 tls["allowInsecure"] = true
@@ -805,7 +805,7 @@ for _, v in ipairs(OutboundCfg) do
                 tls["rejectUnknownSni"] = true
             end
             if v["ss_tls_alpn"] then
-                tls["alpn"] = split(v["ss_tls_alpn"], " ")
+                tls["alpn"] = v["ss_tls_alpn"]
             end
             if v["ss_tls_allowinsecure"] then
                 tls["allowInsecure"] = true
