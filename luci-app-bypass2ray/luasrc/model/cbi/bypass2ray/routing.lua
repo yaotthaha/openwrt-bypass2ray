@@ -154,12 +154,10 @@ end
 o = s:option(ListValue, "balancertag", translate("Balancer Alias"))
 o:value("")
 uci:foreach(appname, "routing_balancer", function(t)
-	if t["enable"] == "1" then
-		if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
-			return
-		end
-		o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
+	if t["tag"] == nil and t["tag"] == "" and t["alias"] == nil and t["alias"] == "" then
+		return
 	end
+	o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
 end)
 
 -- Balancer
@@ -217,5 +215,9 @@ uci:foreach(appname, "outbound", function(t)
 		o:value(t["tag"], t["alias"] .. " (" .. t["tag"] .. ")")
 	end
 end)
+
+o = s:option(ListValue, "strategy_type", translate("Strategy Type"))
+o:value("random")
+o:value("leastPing")
 
 return m
