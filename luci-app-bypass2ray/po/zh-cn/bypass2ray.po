@@ -605,7 +605,7 @@ msgid "Tproxy Global Script"
 msgstr "Tproxy 全局脚本"
 
 msgid "Tproxy Bypass CNIP Script"
-msgstr "Tproxy 绕过中国大陆IP脚本
+msgstr "Tproxy 绕过中国大陆IP脚本"
 
 msgid "Geo File"
 msgstr "Geo 文件"
