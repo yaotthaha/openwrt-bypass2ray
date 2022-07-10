@@ -185,26 +185,6 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or false
 end
 
---[[
-o = s:option(DummyValue, "selector", translate("Selector"))
-o.cfgvalue = function (_, n)
-	local Value = uci:get(appname, n, "selector")
-	if type(Value) == "table" and #Value > 0 then
-		local S = Value
-		uci:foreach(appname, "outbound", function(s)
-			for K, V in ipairs(Value) do
-				if s["tag"] == V then
-					S[K] = s["alias"]
-				end
-			end
-		end)
-		return jsonc.stringify(S, 1)
-	else
-		return "-"
-	end
-end
-]]--
-
 o = s:option(DynamicList, "selector", translate("Selector"))
 o.rmempty = false
 uci:foreach(appname, "outbound", function(t)

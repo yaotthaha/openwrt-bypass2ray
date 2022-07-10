@@ -28,6 +28,7 @@ o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "?"
 end
 
+--[[
 o = s:option(DummyValue, "subscribe_tag", translate("SubscribeAlias"))
 o.cfgvalue = function(_, n)
 	local Value = uci:get(appname, n, "subscribe_tag")
@@ -40,6 +41,7 @@ o.cfgvalue = function(_, n)
 	end
 	return ReturnV
 end
+--]]
 
 o = s:option(DummyValue, "protocol", translate("Protocol"))
 o.cfgvalue = function (...)
@@ -53,11 +55,12 @@ o.cfgvalue = function (...)
 end
 --]]
 
+--[[
 o = s:option(DummyValue, "ps_tag", translate("Proxy Tag"))
 o.cfgvalue = function (...)
 	return Value.cfgvalue(...) or "-"
 end
-
+--]]
 
 o = s:option(Flag, "enable", translate("Enable"))
 o.cfgvalue = function (...)

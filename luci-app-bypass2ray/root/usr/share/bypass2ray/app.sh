@@ -87,6 +87,7 @@ start() {
         log "PID: $id"
         echo $id >$PID
         lua /usr/share/bypass2ray/run_scripts.lua poststart | while read l; do [ -z "$l" ] || echo $l && log $l; done
+        lua /usr/share/bypass2ray/run_scripts.lua savestop
     fi
 }
 
@@ -107,11 +108,11 @@ stop() {
         kill $PID_N >/dev/null 2>&1
         rm -f $PID
         log "结束进程: $PID_N"
+        lua /usr/share/bypass2ray/run_scripts.lua poststop | while read l; do [ -z "$l" ] || echo $l && log $l; done
         if [ ! -z "$TMPDIR" ]; then
             rm -rf ${TMPDIR}*
         fi
         log "清空临时文件夹: $TMPDIR"
-        lua /usr/share/bypass2ray/run_scripts.lua poststop | while read l; do [ -z "$l" ] || echo $l && log $l; done
     fi
 }
 

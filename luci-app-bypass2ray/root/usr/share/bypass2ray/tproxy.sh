@@ -116,7 +116,8 @@ EOF
 IPTables4Start() {
     $IPT_M -N TPROXY_PRE 2>/dev/null
     $IPT_M -F TPROXY_PRE
-    $IPT_M -A TPROXY_PRE -i pppoe-wan -j RETURN
+    #$IPT_M -A TPROXY_PRE -i pppoe-wan -j RETURN
+    $IPT_M -A TPROXY_PRE -j CONNMARK --restore-mark
     $IPT_M -A TPROXY_PRE -m mark --mark 0xff -j RETURN
     $IPT_M -A TPROXY_PRE -m set --match-set $IPSetName_PrivateV4 dst -j RETURN
     $IPT_M -A TPROXY_PRE -m set --match-set $IPSetName_DirectV4 dst -j RETURN
@@ -127,10 +128,11 @@ IPTables4Start() {
     $IPT_M -I PREROUTING -j TPROXY_PRE
     $IPT_M -N TPROXY_OUT 2>/dev/null
     $IPT_M -F TPROXY_OUT
-    $IPT_M -A TPROXY_OUT -m owner --gid-owner $gid -j RETURN
+    $IPT_M -A TPROXY_OUT -m owner --gid-owner $gid -j MARK --set-mark 0xff
+    $IPT_M -A TPROXY_OUT -m set --match-set $IPSetName_PrivateV4 dst -j MARK --set-mark 0xff
+    $IPT_M -A TPROXY_OUT -m set --match-set $IPSetName_DirectV4 dst -j MARK --set-mark 0xff
+    $IPT_M -A TPROXY_OUT -j CONNMARK --save-mark
     $IPT_M -A TPROXY_OUT -m mark --mark 0xff -j RETURN
-    $IPT_M -A TPROXY_OUT -m set --match-set $IPSetName_PrivateV4 dst -j RETURN
-    $IPT_M -A TPROXY_OUT -m set --match-set $IPSetName_DirectV4 dst -j RETURN
     $IPT_M -A TPROXY_OUT -m set --match-set $IPSetName_ProxyV4 dst -p tcp -j MARK --set-mark 1
     $IPT_M -A TPROXY_OUT -m set --match-set $IPSetName_ProxyV4 dst -p udp -j MARK --set-mark 1
     $IPT_M -A TPROXY_OUT -m set ! --match-set $IPSetName_CNV4 dst -p tcp -j MARK --set-mark 1
@@ -138,11 +140,11 @@ IPTables4Start() {
     $IPT_M -I OUTPUT -j TPROXY_OUT
     ip route add local default dev lo table 100
     ip rule add fwmark 1 table 100
-    $IPT_M -N TPROXY_DIV 2>/dev/null
-    $IPT_M -F TPROXY_DIV
-    $IPT_M -A TPROXY_DIV -j MARK --set-mark 1
-    $IPT_M -A TPROXY_DIV -j ACCEPT
-    $IPT_M -I PREROUTING -p tcp -m socket -j TPROXY_DIV
+    #$IPT_M -N TPROXY_DIV 2>/dev/null
+    #$IPT_M -F TPROXY_DIV
+    #$IPT_M -A TPROXY_DIV -j MARK --set-mark 1
+    #$IPT_M -A TPROXY_DIV -j ACCEPT
+    #$IPT_M -I PREROUTING -p tcp -m socket -j TPROXY_DIV
 }
 
 IPTables4Stop() {
@@ -150,19 +152,20 @@ IPTables4Stop() {
     ip rule del fwmark 1 table 100
     $IPT_M -D PREROUTING -j TPROXY_PRE
     $IPT_M -D OUTPUT -j TPROXY_OUT
-    $IPT_M -D PREROUTING -p tcp -m socket -j TPROXY_DIV
+    #$IPT_M -D PREROUTING -p tcp -m socket -j TPROXY_DIV
     $IPT_M -F TPROXY_PRE
     $IPT_M -X TPROXY_PRE
     $IPT_M -F TPROXY_OUT
     $IPT_M -X TPROXY_OUT
-    $IPT_M -F TPROXY_DIV
-    $IPT_M -X TPROXY_DIV
+    #$IPT_M -F TPROXY_DIV
+    #$IPT_M -X TPROXY_DIV
 }
 
 IPTables6Start() {
     $IP6T_M -N TPROXY_PRE 2>/dev/null
     $IP6T_M -F TPROXY_PRE
-    $IP6T_M -A TPROXY_PRE -i pppoe-wan -j RETURN
+    #$IP6T_M -A TPROXY_PRE -i pppoe-wan -j RETURN
+    $IP6T_M -A TPROXY_PRE -j CONNMARK --restore-mark
     $IP6T_M -A TPROXY_PRE -m mark --mark 0xff -j RETURN
     $IP6T_M -A TPROXY_PRE -m set --match-set $IPSetName_PrivateV6 dst -j RETURN
     $IP6T_M -A TPROXY_PRE -m set --match-set $IPSetName_DirectV6 dst -j RETURN
@@ -173,10 +176,11 @@ IPTables6Start() {
     $IP6T_M -I PREROUTING -j TPROXY_PRE
     $IP6T_M -N TPROXY_OUT 2>/dev/null
     $IP6T_M -F TPROXY_OUT
-    $IP6T_M -A TPROXY_OUT -m owner --gid-owner $gid -j RETURN
+    $IP6T_M -A TPROXY_OUT -m owner --gid-owner $gid -j MARK --set-mark 0xff
+    $IP6T_M -A TPROXY_OUT -m set --match-set $IPSetName_PrivateV6 dst -j MARK --set-mark 0xff
+    $IP6T_M -A TPROXY_OUT -m set --match-set $IPSetName_DirectV6 dst -j MARK --set-mark 0xff
+    $IP6T_M -A TPROXY_OUT -j CONNMARK --save-mark
     $IP6T_M -A TPROXY_OUT -m mark --mark 0xff -j RETURN
-    $IP6T_M -A TPROXY_OUT -m set --match-set $IPSetName_PrivateV6 dst -j RETURN
-    $IP6T_M -A TPROXY_OUT -m set --match-set $IPSetName_DirectV6 dst -j RETURN
     $IP6T_M -A TPROXY_OUT -m set --match-set $IPSetName_ProxyV6 dst -p tcp -j MARK --set-mark 1
     $IP6T_M -A TPROXY_OUT -m set --match-set $IPSetName_ProxyV6 dst -p udp -j MARK --set-mark 1
     $IP6T_M -A TPROXY_OUT -m set ! --match-set $IPSetName_CNV6 dst -p tcp -j MARK --set-mark 1
@@ -184,11 +188,11 @@ IPTables6Start() {
     $IP6T_M -I OUTPUT -j TPROXY_OUT
     ip -6 route add local default dev lo table 100
     ip -6 rule add fwmark 1 table 100
-    $IP6T_M -N TPROXY_DIV 2>/dev/null
-    $IP6T_M -F TPROXY_DIV
-    $IP6T_M -A TPROXY_DIV -j MARK --set-mark 1
-    $IP6T_M -A TPROXY_DIV -j ACCEPT
-    $IP6T_M -I PREROUTING -p tcp -m socket -j TPROXY_DIV
+    #$IP6T_M -N TPROXY_DIV 2>/dev/null
+    #$IP6T_M -F TPROXY_DIV
+    #$IP6T_M -A TPROXY_DIV -j MARK --set-mark 1
+    #$IP6T_M -A TPROXY_DIV -j ACCEPT
+    #$IP6T_M -I PREROUTING -p tcp -m socket -j TPROXY_DIV
 }
 
 IPTables6Stop() {
@@ -196,13 +200,13 @@ IPTables6Stop() {
     ip -6 rule del fwmark 1 table 100
     $IP6T_M -D PREROUTING -j TPROXY_PRE
     $IP6T_M -D OUTPUT -j TPROXY_OUT
-    $IP6T_M -D PREROUTING -p tcp -m socket -j TPROXY_DIV
+    #$IP6T_M -D PREROUTING -p tcp -m socket -j TPROXY_DIV
     $IP6T_M -F TPROXY_PRE
     $IP6T_M -X TPROXY_PRE
     $IP6T_M -F TPROXY_OUT
     $IP6T_M -X TPROXY_OUT
-    $IP6T_M -F TPROXY_DIV
-    $IP6T_M -X TPROXY_DIV
+    #$IP6T_M -F TPROXY_DIV
+    #$IP6T_M -X TPROXY_DIV
 }
 
 IPSetDestroy() {

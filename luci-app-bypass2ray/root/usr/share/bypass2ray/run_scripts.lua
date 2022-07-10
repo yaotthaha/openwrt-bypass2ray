@@ -3,8 +3,10 @@ local support = require "luci.model.cbi.bypass2ray.support"
 local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
 local appname = support.appname
+local jsonc = require 'luci.jsonc'
 
 local mode = arg[1]
+local savefilename = "/tmp/bypass2ray/stop_run_script.json"
 
 function SearchScript(name)
     local cfg
@@ -46,8 +48,25 @@ elseif mode == "poststart" then
     elseif scripts == -1 then
         print("Fail")
     end
+elseif mode == "savestop" then
+    local pre_stop_script = SearchScript("pre_stop_script")
+    local post_stop_script = SearchScript("post_stop_script")
+    local t = {}
+    t["pre_stop_script"] = pre_stop_script
+    t["post_stop_script"] = post_stop_script
+    local tjson = jsonc.stringify(t, 1)
+    local sf = io.open(savefilename, "w")
+    sf:write(tjson)
+    sf:close()
 elseif mode == "prestop" then
-    local scripts = SearchScript("pre_stop_script")
+    local d = ""
+    sf = io.open(savefilename ,"r")
+    for line in sf:lines() do
+	    d = d .. line .. "\n"
+    end
+    sf:close()
+    local dtable = jsonc.parse(d)
+    local scripts = dtable["pre_stop_script"]
     if type(scripts) == "table" then
         if table.getn(scripts) > 0 then
             for _, v in ipairs(scripts) do
@@ -57,11 +76,20 @@ elseif mode == "prestop" then
         else
             print("")
         end
+    elseif scripts == nil then
+        return
     elseif scripts == -1 then
         print("Fail")
     end
 elseif mode == "poststop" then
-    local scripts = SearchScript("post_stop_script")
+    local d = ""
+    sf = io.open(savefilename ,"r")
+    for line in sf:lines() do
+	    d = d .. line .. "\n"
+    end
+    sf:close()
+    local dtable = jsonc.parse(d)
+    local scripts = dtable["post_stop_script"]
     if type(scripts) == "table" then
         if table.getn(scripts) > 0 then
             for _, v in ipairs(scripts) do
@@ -71,6 +99,8 @@ elseif mode == "poststop" then
         else
             print("")
         end
+    elseif scripts == nil then
+        return
     elseif scripts == -1 then
         print("Fail")
     end
